@@ -27,7 +27,7 @@ const UserSettingsDialog = props => {
     }
 
     return (
-        <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='sm'>
+        <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
             <DialogContent>
                 <h2>Update Your Settings</h2>
                 <h4>Enter details below:</h4>
