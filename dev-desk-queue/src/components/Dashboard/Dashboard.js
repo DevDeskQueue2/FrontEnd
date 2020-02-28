@@ -145,7 +145,7 @@ const Dashboard = props => {
 
     return (
         <div className='dashboard'>
-            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('student') }/>
+            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('helper') }/>
             <div className='user-dashboard'>
                 {/* determine what to render based on user type */}
                 { renderCurrentItem('helper') }

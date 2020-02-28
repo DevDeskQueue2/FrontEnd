@@ -36,9 +36,13 @@ const EditTicketDialog = props => {
         })
     }
 
-    const handleEditRequest = () => {
+    const handleEditRequest = (isComplete) => {
         // this function will send the ticket information back to whomever called it
-        props.onUserEditTicketRequest(info);
+        if(!isComplete) {
+            props.onUserEditTicketRequest(info);
+        } else {
+            props.onUserEditTicketRequest({...info, status: 'Resolved'})
+        }
         setInfo(initialInfo)
         props.handleClose();
     }
@@ -70,6 +74,16 @@ const EditTicketDialog = props => {
                     name='category'
                     disabled={true}
                     value={info.category} />
+            )
+        }
+    }
+
+    const renderCompleteButton = () => {
+        if(props.userType === 'helper') {
+            return (
+                <Button onClick={() => handleEditRequest(true)} color="primary">
+                    Complete
+                </Button>
             )
         }
     }
@@ -111,6 +125,7 @@ const EditTicketDialog = props => {
             
             <DialogActions>
 
+                { renderCompleteButton() }
                 <Button onClick={() => handleEditRequest()} color="primary">
                     Edit
                 </Button>

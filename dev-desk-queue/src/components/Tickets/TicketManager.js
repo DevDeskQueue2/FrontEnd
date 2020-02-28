@@ -100,7 +100,7 @@ const TicketManager = props => {
 
     return (
         <div className='ticket-manager-container'>
-            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('student')}/>
+            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('helper')}/>
             
             <div className='ticket-manager'>
                 <SearchBar userType='helper' categories={['All', 'React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
