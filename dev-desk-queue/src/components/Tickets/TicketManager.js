@@ -1,5 +1,6 @@
 import React from 'react';
 import SideNavigation from '../Dashboard/SideNavigation';
+import SearchBar from './SearchBar/SearchBar.js';
 
 const TicketManager = props => {
     const links = [
@@ -22,12 +23,15 @@ const TicketManager = props => {
         }
     }
 
+    const doSearch = params => {
+        console.log(params);
+    }
+
     return (
         <div className='ticket-manager-container'>
             <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={links}/>
             <div className='ticket-manager'>
-                {/* determine what to render based on user type */}
-                Ticket Manager
+                <SearchBar userType='helper' categories={['React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
             </div>
         </div>
     )
