@@ -56,7 +56,7 @@ const TicketManager = props => {
 
     React.useEffect( () => {
         console.log('ticket clicked', ticketToEdit);
-        if(ticketToEdit !== undefined) {
+        if(ticketToEdit.title !== '') {
             setEditTicketOpen(true);
         }
     }, [ticketToEdit])

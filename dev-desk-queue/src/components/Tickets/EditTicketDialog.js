@@ -9,7 +9,6 @@ import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 const EditTicketDialog = props => {
 
     console.log('edit ticket dialog', props);
-    console.log('props.ticket === undefined', props.ticket=== undefined);
 
     const initialInfo = {
         title: '', 
@@ -23,14 +22,12 @@ const EditTicketDialog = props => {
     const [info, setInfo] = React.useState(props.ticket) 
 
     React.useEffect( () => {
-        if(props.ticket !== undefined) {
-            setInfo(props.ticket);
-        }
+        setInfo(props.ticket);
     }, [])
 
     React.useEffect( () => {
-        console.log('info changed', info);
-    }, [info])
+        setInfo(props.ticket)
+    }, [props.open])
 
     const handleChange = evt => {
         setInfo({
