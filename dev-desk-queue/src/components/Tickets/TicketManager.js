@@ -1,5 +1,8 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import SideNavigation from '../Dashboard/SideNavigation';
+
+
 
 const TicketManager = props => {
     const links = [
@@ -33,4 +36,10 @@ const TicketManager = props => {
     )
 }
 
-export default TicketManager;
+const mapStateToProps = state => {
+    return {
+        tickets : state.tickets,
+    }
+}
+
+export default connect(mapStateToProps, {})(TicketManager);
