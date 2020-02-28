@@ -38,6 +38,10 @@ const TicketManager = props => {
 
     const [open, setOpen] = React.useState(false);
     const [createTicketOpen, setCreateTicketOpen] = React.useState(false);
+    const [editTicketOpen, setEditTicketOpen] = React.useState(false);
+    const [ticketToEdit, setTicketToEdit] = React.useState({});
+    const [tickets, setTickets] = React.useState([]);
+    const [ticketsToDisplay, setTicketsToDisplay] = React.useState([]);
 
     const onLinkClick = to => {
         console.log('onLinkClick', to);
@@ -66,14 +70,40 @@ const TicketManager = props => {
         setCreateTicketOpen(true);
     }
 
+    const onTicketClick = id => {
+        //this function will grab the ticket and populate the EditTicketDialog
+        setTicketToEdit( tickets.filter( ticket => { return ticket.id === id } )[0] )
+        setEditTicketOpen(true);
+    }
+
     return (
         <div className='ticket-manager-container'>
             <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('student')}/>
+            
             <div className='ticket-manager'>
                 <SearchBar userType='helper' categories={['All', 'React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
+                <TicketList tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
             </div>
-            <UserSettingsDialog email='user@email.com' open={open} handleClose={() => setOpen(false)} onUpdateUserSettingsRequest={(info) => console.log(info)}/>
-            <CreateTicketDialog categories={['React', 'Financial', 'Other']} open={createTicketOpen} handleClose={() => setCreateTicketOpen(false)} onUserCreateTicketRequest={ (info) => console.log(info)} />
+
+            <UserSettingsDialog 
+                email='user@email.com' 
+                open={open} 
+                handleClose={() => setOpen(false)} 
+                onUpdateUserSettingsRequest={(info) => console.log(info)}/>
+            
+            <CreateTicketDialog 
+                categories={['React', 'Financial', 'Other']} 
+                open={createTicketOpen} 
+                handleClose={() => setCreateTicketOpen(false)} 
+                onUserCreateTicketRequest={ (info) => console.log(info)} />
+            
+            <EditTicketDialog 
+                ticket={ticketToEdit} 
+                userType={props.userType} 
+                open={editTicketOpen} 
+                handleClose={() => setEditTicketOpen(false)} 
+                onUserEditTicketRequest={ (info) => console.log(info)} />
+
         </div>
     )
 }
