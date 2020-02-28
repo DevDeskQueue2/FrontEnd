@@ -88,6 +88,11 @@ const TicketManager = props => {
         setCreateTicketOpen(true);
     }
 
+    const handleCloseEdit = () => {
+        setEditTicketOpen(false);
+        setTicketToEdit(initialInfo);
+    }
+
     const onTicketClick = id => {
         //this function will grab the ticket and populate the EditTicketDialog
         setTicketToEdit( tickets.filter( ticket => { return ticket.id === id } )[0])
@@ -99,7 +104,7 @@ const TicketManager = props => {
             
             <div className='ticket-manager'>
                 <SearchBar userType='helper' categories={['All', 'React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
-                <TicketList userType='student' tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
+                <TicketList userType='helper' tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
             </div>
 
             <UserSettingsDialog 
@@ -119,7 +124,7 @@ const TicketManager = props => {
                 userType='student' 
                 open={editTicketOpen} 
                 categories={['React', 'Financial', 'Other']} 
-                handleClose={() => setEditTicketOpen(false)} 
+                handleClose={() => handleCloseEdit()} 
                 onUserEditTicketRequest={ (info) => console.log(info)} />
 
         </div>
