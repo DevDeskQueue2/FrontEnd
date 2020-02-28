@@ -11,12 +11,6 @@ const MenuSearch = props => {
 
     return (
         <div className='menu-search'>
-            {/* TODO add dropdown menu based on props.menu */}
-            {/* <InputLabel id="label">{props.placeholder}</InputLabel>
-            <Select labelId="label" id="select" value={props.defaultValue}>
-                  
-            </Select> */}
-
             <FormControl>
                 <InputLabel id="demo-simple-select-label">{props.placeholder}</InputLabel>
                 <Select
