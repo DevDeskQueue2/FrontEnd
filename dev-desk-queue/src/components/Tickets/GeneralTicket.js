@@ -19,7 +19,7 @@ const GeneralTicket = props => {
     }
 
     return (
-        <div className='general-ticket'>
+        <div className='general-ticket' onClick={() => props.onTicketClick(props.ticket.id)}>
             {/* This ticket will display all of the information and not be editable, when clicked will have a popup */}
             
             <div className='status-container'>

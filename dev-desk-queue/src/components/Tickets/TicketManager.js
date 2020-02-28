@@ -3,6 +3,10 @@ import SideNavigation from '../Dashboard/SideNavigation';
 import SearchBar from './SearchBar/SearchBar.js';
 import UserSettingsDialog from '../User/UserSettingsDialog';
 import CreateTicketDialog from './CreateTicketDialog'; 
+import EditTicketDialog from './EditTicketDialog';
+import TicketList from './TicketList';
+
+import data from '../../data/dummyData';
 
 const TicketManager = props => {
     const getLinkList = (userType) => {
@@ -36,12 +40,26 @@ const TicketManager = props => {
         }
     }
 
+    const initialInfo = {
+        title: '', 
+        description: '',
+        tried: '',
+        category: ''
+    }
+
     const [open, setOpen] = React.useState(false);
     const [createTicketOpen, setCreateTicketOpen] = React.useState(false);
     const [editTicketOpen, setEditTicketOpen] = React.useState(false);
-    const [ticketToEdit, setTicketToEdit] = React.useState({});
-    const [tickets, setTickets] = React.useState([]);
-    const [ticketsToDisplay, setTicketsToDisplay] = React.useState([]);
+    const [ticketToEdit, setTicketToEdit] = React.useState(initialInfo);
+    const [tickets, setTickets] = React.useState(data);
+    const [ticketsToDisplay, setTicketsToDisplay] = React.useState(data);
+
+    React.useEffect( () => {
+        console.log('ticket clicked', ticketToEdit);
+        if(ticketToEdit !== undefined) {
+            setEditTicketOpen(true);
+        }
+    }, [ticketToEdit])
 
     const onLinkClick = to => {
         console.log('onLinkClick', to);
@@ -72,8 +90,7 @@ const TicketManager = props => {
 
     const onTicketClick = id => {
         //this function will grab the ticket and populate the EditTicketDialog
-        setTicketToEdit( tickets.filter( ticket => { return ticket.id === id } )[0] )
-        setEditTicketOpen(true);
+        setTicketToEdit( tickets.filter( ticket => { return ticket.id === id } )[0])
     }
 
     return (
@@ -82,7 +99,7 @@ const TicketManager = props => {
             
             <div className='ticket-manager'>
                 <SearchBar userType='helper' categories={['All', 'React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
-                <TicketList tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
+                <TicketList userType='student' tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
             </div>
 
             <UserSettingsDialog 
@@ -99,8 +116,9 @@ const TicketManager = props => {
             
             <EditTicketDialog 
                 ticket={ticketToEdit} 
-                userType={props.userType} 
+                userType='student' 
                 open={editTicketOpen} 
+                categories={['React', 'Financial', 'Other']} 
                 handleClose={() => setEditTicketOpen(false)} 
                 onUserEditTicketRequest={ (info) => console.log(info)} />
 
