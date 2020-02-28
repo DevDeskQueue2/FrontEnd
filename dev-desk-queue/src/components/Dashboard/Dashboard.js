@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from "react-redux";
 import SideNavigation from './SideNavigation';
 import UserSettingsDialog from '../User/UserSettingsDialog';
 
@@ -46,4 +47,10 @@ const Dashboard = props => {
     )
 }
 
-export default Dashboard;
+const mapStateToProps = state => {
+    return {
+        userName: state.userName,
+    }
+}
+
+export default connect(mapStateToProps, {})(Dashboard);
