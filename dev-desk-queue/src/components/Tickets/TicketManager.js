@@ -104,7 +104,7 @@ const TicketManager = props => {
             
             <div className='ticket-manager'>
                 <SearchBar userType='helper' categories={['All', 'React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
-                <TicketList userType='helper' tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
+                <TicketList size='large' userType='helper' tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
             </div>
 
             <UserSettingsDialog 
