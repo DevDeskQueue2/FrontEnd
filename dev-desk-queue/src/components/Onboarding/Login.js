@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 
+import cogoToast from 'cogo-toast';
+
 const Login = props => {
 
     const initialInfo = {
@@ -37,6 +39,11 @@ const Login = props => {
         if(validate()) {
             props.onUserLoginRequest(info);
             setInfo(initialInfo);
+        } else {
+            cogoToast.error('Incorrect credentials', {
+                hideAfter: 3,
+                position: 'top-center'
+            });
         }
 
         console.log('done with validation', emailError);
