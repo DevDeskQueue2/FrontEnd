@@ -19,7 +19,7 @@ const Login = props => {
 
     return (
         <div className='onboarding-form login-form'>
-            <FormGroup onSubmit={(evt) => handleSubmit(evt)}>
+            <FormGroup>
                 <TextField 
                     placeholder='Email' 
                     type='text' 
@@ -37,10 +37,11 @@ const Login = props => {
                     onChange={ (evt) => setInfo({ ...info, [evt.target.name]: evt.target.value}) } />
 
                 <br />
-
-                <Button>Login</Button> 
             </FormGroup>
-            <Button onClick={ (evt) => props.onRequestToRegister() } >To Register</Button>
+            <div className='onboarding-nav-buttons'>
+                <Button variant='outlined' onClick={(evt) => handleSubmit(evt)}>Login</Button> 
+                <Button variant='outlined' onClick={ (evt) => props.onRequestToRegister() } >To Register</Button>
+            </div>
             
         </div>
     )

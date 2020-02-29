@@ -86,4 +86,12 @@
   border: 2px solid black;
   border-radius: 10px;
   margin-top: 5%;
+  padding-bottom: 5%;
+}
+
+.onboarding-nav-buttons {
+  /* border: 2px orange solid; */
+  padding-top: 5%;
+  display: flex;
+  justify-content: space-evenly;
 }

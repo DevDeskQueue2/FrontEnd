@@ -21,7 +21,7 @@ const Register = props => {
 
     return (
         <div className='onboarding-form register-form'>
-            <FormGroup onSubmit={(evt) => handleSubmit(evt)}>
+            <FormGroup>
                 <TextField 
                     placeholder='Email' 
                     type='text' 
@@ -55,10 +55,13 @@ const Register = props => {
                     label="Helper"
                     labelPlacement="end" />
 
-                <Button>Submit</Button> 
+                 
             </FormGroup>
-
-           <Button onClick={ (evt) => props.onRequestToLogin() }>To Login</Button>
+            <div className='onboarding-nav-buttons'>
+                <Button variant='outlined' onClick={(evt) => handleSubmit(evt)}>Submit</Button>
+                <Button variant='outlined' onClick={ (evt) => props.onRequestToLogin() }>To Login</Button>
+            </div>
+           
         </div>
     )
 };
