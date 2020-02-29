@@ -63,7 +63,8 @@ const devDeskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching :false,
-                userName : "Set username",
+                userName : action.payload.userName,
+                token : action.payload.token
 
             }
         case LOGIN_ERROR: 
