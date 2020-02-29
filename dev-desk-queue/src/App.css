@@ -75,3 +75,15 @@
   margin-left: 30px;
   margin-right: 30px;
 }
+.onboarding-form {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.onboarding {
+  width: 500px;
+  margin: 0 auto;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-top: 5%;
+}
