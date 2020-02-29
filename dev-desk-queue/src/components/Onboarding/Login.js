@@ -2,10 +2,13 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
-
 import cogoToast from 'cogo-toast';
 
+import {connect} from "react-redux";
+
 const Login = props => {
+
+    console.log(props)
 
     const initialInfo = {
         email: '', password: ''
@@ -122,7 +125,7 @@ const Login = props => {
 
             </FormGroup>
             <div className='onboarding-nav-buttons'>
-                <Button variant='outlined' onClick={(evt) => handleSubmit(evt)}>Login</Button> 
+                <Button variant='outlined' disabled={props.isFetching} onClick={(evt) => handleSubmit(evt)}>Login</Button> 
                 <Button variant='outlined' onClick={ (evt) => props.onRequestToRegister() } >To Register</Button>
             </div>
             
@@ -130,4 +133,10 @@ const Login = props => {
     )
 };
 
-export default Login;
+const mapStateToProps = state => {
+    return {
+        isFetching : state.isFetching,
+    }
+}
+
+export default connect(mapStateToProps, {})(Login);

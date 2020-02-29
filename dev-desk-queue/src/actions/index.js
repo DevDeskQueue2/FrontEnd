@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-
+//not deleted
 export const SIGNUP_START = "SIGNUP_START";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SIGNUP_ERROR = "SIGNUP_ERROR";
@@ -9,15 +9,23 @@ export const SIGNUP_ERROR = "SIGNUP_ERROR";
 
 export const signUp = state => dispatch => {
     dispatch({ type : SIGNUP_START})
-    return axios.post("whatever link to post", state)
-        .then(res => {
-            dispatch({type : SIGNUP_SUCCESS})
+    // return axios.post("whatever link to post", state)
+    //     .then(res => {
+    //         dispatch({type : SIGNUP_SUCCESS})
 
-        })
-        .catch(err => {
-            dispatch ({type: SIGNUP_ERROR, payload: err})
+    //     })
+    //     .catch(err => {
+    //         dispatch ({type: SIGNUP_ERROR, payload: err})
 
-        })
+    //     })
+    return new Promise(function(res) {
+        setTimeout(() => {
+            console.log("registered");
+            res(state)
+            dispatch({type: SIGNUP_SUCCESS})
+            
+        }, 1500)
+    })
 };
 
 
@@ -29,15 +37,24 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const login = state => dispatch => {
 
     dispatch({type :LOGIN_START})
-    return axios.post("link", state)
-    .then(res => {
-        localStorage.setItem("token", res.data)
-        dispatch({type: LOGIN_SUCCESS, payload: res.data})
+    // return axios.post("link", state)
+    // .then(res => {
+    //     localStorage.setItem("token", res.data)
+    //     dispatch({type: LOGIN_SUCCESS, payload: res.data})
         
 
-    })
-    .catch(err=>{
-        dispatch({type: LOGIN_ERROR, payload: err})
+    // })
+    // .catch(err=>{
+    //     dispatch({type: LOGIN_ERROR, payload: err})
+    // })
+
+    return new Promise(function(res) {
+        setTimeout(() => {
+            console.log("signin up");
+            res(state)
+            dispatch({type: LOGIN_SUCCESS, payload: res.data})
+            
+        }, 1500)
     })
 }
 

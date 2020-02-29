@@ -7,6 +7,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import cogoToast from 'cogo-toast';
 
+import {connect} from "react-redux";
+
+
 const Register = props => {
 
     const initialInfo = {
@@ -131,12 +134,17 @@ const Register = props => {
                  
             </FormGroup>
             <div className='onboarding-nav-buttons'>
-                <Button variant='outlined' onClick={(evt) => handleSubmit(evt)}>Submit</Button>
-                <Button variant='outlined' onClick={ (evt) => props.onRequestToLogin() }>To Login</Button>
+                <Button variant='outlined' disabled={props.isFetching} onClick={(evt) => handleSubmit(evt)}>Submit</Button>
+                <Button variant='outlined'  onClick={ (evt) => props.onRequestToLogin() }>To Login</Button>
             </div>
            
         </div>
     )
 };
 
-export default Register;
+const mapStateToProps = state => {
+    return {
+        isFetching : state.isFetching
+    }
+}
+export default connect(mapStateToProps, {})(Register);

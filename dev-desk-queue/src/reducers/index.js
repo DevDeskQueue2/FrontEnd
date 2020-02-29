@@ -23,9 +23,9 @@ import {
 const initialState = {
     userName: "",
     userType : "",
+    currentType: "",
     error: "",
-    signedUp: false,
-    isSigningUp : false,
+    isRegistered : false,
     isFetching : false,
     category: [],
     tickets : [],
@@ -39,18 +39,18 @@ const devDeskReducer = (state = initialState, action) => {
         case SIGNUP_START: 
             return {
                 ...state,
-                isSigningUp: true
+                isFetching: true
             }
         case SIGNUP_SUCCESS: 
             return {
                 ...state,
-                isSigningUp : false,
-                signedUp: true,
+                isFetching : false,
+                isRegistered: true,
             }
         case SIGNUP_ERROR: 
             return {
                 ...state,
-                isSigningUp: false,
+                isFetching: false,
                 error: action.payload,
             }
         case LOGIN_START :
@@ -62,9 +62,9 @@ const devDeskReducer = (state = initialState, action) => {
         case LOGIN_SUCCESS :
             return {
                 ...state,
+                isRegistered: false,
                 isFetching :false,
-                userName : action.payload.userName,
-                token : action.payload.token
+                token : action.payload
 
             }
         case LOGIN_ERROR: 
