@@ -7,6 +7,9 @@ import EditTicketDialog from '../Tickets/EditTicketDialog';
 import GeneralTicket from '../Tickets/GeneralTicket';
 import TicketList from '../Tickets/TicketList';
 
+
+import {editTicket, addTicket, fetchCategories, fetchTickets} from "../../actions";
+
 const Dashboard = props => {
 
     const initialTicketToEdit = {
@@ -108,7 +111,7 @@ const Dashboard = props => {
             return (
                 <div className='current-ticket'>
                     <h3>Current Ticket</h3>
-                    <GeneralTicket onTicketClick={(id) => onTicketClick(id)} userType='helper' ticket={currentTicket} />
+                    <GeneralTicket onTicketClick={(id) => onTicketClick(id)} userType={props.userType} ticket={currentTicket} />
                 </div>
             )
         }
@@ -146,11 +149,11 @@ const Dashboard = props => {
 
     return (
         <div className='dashboard'>
-            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('helper') }/>
+            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList(props.userType) }/>
             <div className='user-dashboard'>
                 {/* determine what to render based on user type */}
-                { renderCurrentItem('helper') }
-                { renderLists('helper') }
+                { renderCurrentItem(props.userType) }
+                { renderLists(props.userType) }
             </div>
             <UserSettingsDialog email='user@email.com' open={open} handleClose={() => setOpen(false)} onUpdateUserSettingsRequest={(info) => console.log(info)}/>
             <CreateTicketDialog categories={['React', 'Financial', 'Other']} open={createTicketOpen} handleClose={() => setCreateTicketOpen(false)} onUserCreateTicketRequest={ (info) => console.log(info)} />
@@ -168,6 +171,7 @@ const Dashboard = props => {
 const mapStateToProps = state => {
     return {
         userName: state.userName,
+        userType: state.userType,
     }
 }
 

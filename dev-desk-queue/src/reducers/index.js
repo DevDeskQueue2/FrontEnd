@@ -5,6 +5,9 @@ import {
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_ERROR,
+    REMOVE_USER_START,
+    REMOVE_USER_SUCCESS,
+    REMOVE_USER_ERROR,
     CATEGORY_START,
     CATEGORY_SUCCESS,
     CATEGORY_ERROR,
@@ -22,7 +25,7 @@ import {
 
 const initialState = {
     userName: "",
-    userType : "",
+    userType : "helper",
     currentType: "",
     error: "",
     isRegistered : false,
@@ -72,6 +75,21 @@ const devDeskReducer = (state = initialState, action) => {
                 ...state,
                 isFetching :false,
                 error: action.payload
+            }
+        case REMOVE_USER_START:
+            return {
+                ...state,
+                isFetching: true,
+            }
+        case REMOVE_USER_SUCCESS: 
+            return {
+                ...initialState,
+            }
+        case REMOVE_USER_ERROR:
+            return {
+                ...state,
+                isFetching: false,
+                error: action.payload.message,
             }
         case CATEGORY_START:
             return {

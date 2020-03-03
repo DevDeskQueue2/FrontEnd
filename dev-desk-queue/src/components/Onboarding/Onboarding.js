@@ -22,9 +22,11 @@ const Onboarding = props => {
         } else {
             return <Register 
                     onRequestToLogin={ () => setIsLogin(true) } 
-                    onUserRegisterRequest={ (info) => { 
-                        console.log(info);
-                        props.signUp(info).then(()=> setIsLogin(true))
+                    onUserRegisterRequest={ ({email, password, isHelper}) => { 
+                        const type = isHelper ? 1 : 0
+                        // console.log(info);
+                        console.log(email);
+                        props.signUp({email, password, type}).then(()=> setIsLogin(true))
                         // setIsLogin(true); 
                     }}
                 />
@@ -32,7 +34,7 @@ const Onboarding = props => {
     }
     return (
         <div className='onboarding'>
-            <h2>Enter {(isLogin) ? 'Login' : 'Register'} below:</h2>
+            <h2>{(isLogin) ? 'Login' : 'Register'} below:</h2>
             { renderOnboardComponent(isLogin) }
         </div>
     )
@@ -40,7 +42,8 @@ const Onboarding = props => {
 
 const mapStateToProps = state => {
     return {
-        isRegistered : state.isRegistered
+        isRegistered : state.isRegistered,
+        error: state.error
     }
 }
 

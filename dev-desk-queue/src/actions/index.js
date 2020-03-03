@@ -9,23 +9,17 @@ export const SIGNUP_ERROR = "SIGNUP_ERROR";
 
 export const signUp = state => dispatch => {
     dispatch({ type : SIGNUP_START})
-    // return axios.post("whatever link to post", state)
-    //     .then(res => {
-    //         dispatch({type : SIGNUP_SUCCESS})
-
-    //     })
-    //     .catch(err => {
-    //         dispatch ({type: SIGNUP_ERROR, payload: err})
-
-    //     })
-    return new Promise(function(res) {
-        setTimeout(() => {
-            console.log("registered");
-            res(state)
-            dispatch({type: SIGNUP_SUCCESS})
+    return axios.post("https://dev-deskqueue2.herokuapp.com/api/auth/register", state)
+        .then(res => {
             
-        }, 1500)
-    })
+            dispatch({type : SIGNUP_SUCCESS})
+            
+        })
+        .catch(err => {
+            dispatch ({type: SIGNUP_ERROR, payload: err})
+
+        })
+    
 };
 
 
@@ -37,25 +31,36 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const login = state => dispatch => {
 
     dispatch({type :LOGIN_START})
-    // return axios.post("link", state)
-    // .then(res => {
-    //     localStorage.setItem("token", res.data)
-    //     dispatch({type: LOGIN_SUCCESS, payload: res.data})
-        
+    return axios.post("https://dev-deskqueue2.herokuapp.com/api/auth/login", state)
+    .then(res => {
+        localStorage.setItem("token", res.data)
+        dispatch({type: LOGIN_SUCCESS, payload: res.data})
 
-    // })
-    // .catch(err=>{
-    //     dispatch({type: LOGIN_ERROR, payload: err})
-    // })
-
-    return new Promise(function(res) {
-        setTimeout(() => {
-            console.log("signin up");
-            res(state)
-            dispatch({type: LOGIN_SUCCESS, payload: res.data})
-            
-        }, 1500)
     })
+    .catch(err=>{
+        dispatch({type: LOGIN_ERROR, payload: err})
+    })
+
+}
+
+
+///AUTH required for axios
+
+export const REMOVE_USER_START = "REMOVE_USER_START";
+export const REMOVE_USER_SUCCESS = "REMOVE_USER_SUCCESS";
+export const REMOVE_USER_ERROR = "REMOVE_USER_ERROR";
+
+export const removeUser = state => dispatch => {
+    dispatch({type: REMOVE_USER_START})
+    //needs id to remove user
+        return axios.delete("", state)
+            .then(res => {
+                //return status
+                dispatch({type: REMOVE_USER_SUCCESS})
+            })
+            .catch(err=>{
+                dispatch({type: REMOVE_USER_ERROR, payload: err})
+            })
 }
 
 
@@ -124,7 +129,7 @@ export const EDIT_TICKET_ERROR = "EDIT_TICKET_ERROR";
 export const editTicket = state => dispatch => {
     dispatch({type : EDIT_TICKET_START})
 
-    return axios.post("auth",state)
+    return axios.post("auth", state)
     .then(res => {
         dispatch({type: EDIT_TICKET_SUCCESS, payload: res.data})
 
@@ -134,4 +139,15 @@ export const editTicket = state => dispatch => {
     })
     
 }
+
+
+export const FETCH_TICKETSBYID_START = "FETCH_TICKETSBYID_START";
+export const FETCH_TICKETSBYID_SUCCESS = "FETCH_TICKETSBYID_SUCCESS";
+export const FETCH_TICKETSBYID_ERROR = "FETCH_TICKETSBYID_ERROR";
+
+export const fetchTicketById = state => dispatch => {
+    dispatch({type: FETCH_TICKETSBYID_START})
+    return axios.get("")
+}
+
 
