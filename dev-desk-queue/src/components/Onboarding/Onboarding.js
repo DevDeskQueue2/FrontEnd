@@ -23,10 +23,10 @@ const Onboarding = props => {
             return <Register 
                     onRequestToLogin={ () => setIsLogin(true) } 
                     onUserRegisterRequest={ ({email, password, isHelper}) => { 
-                        const type = isHelper ? 1 : 0
+                        const userType = isHelper ? 1 : 0
                         // console.log(info);
-                        console.log(email);
-                        props.signUp({email, password, type}).then(()=> setIsLogin(true))
+                        
+                        props.signUp({email, password, userType}).then(()=> setIsLogin(true))
                         // setIsLogin(true); 
                     }}
                 />

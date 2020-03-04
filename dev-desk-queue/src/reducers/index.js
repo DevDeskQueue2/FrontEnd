@@ -20,18 +20,67 @@ import {
     EDIT_TICKET_START,
     EDIT_TICKET_SUCCESS,
     EDIT_TICKET_ERROR,
+    FETCH_TICKETS_ID_START,
+    FETCH_TICKETS_ID_SUCCESS,
+    FETCH_TICKETS_ID_ERROR,
 } from "../actions/index";
 
 
 const initialState = {
     userName: "",
-    userType : "helper",
+    userType : "student",
     currentType: "",
     error: "",
     isRegistered : false,
     isFetching : false,
-    category: [],
-    tickets : [],
+    categories: [],
+    tickets : [ {
+        id: 0,
+        title: 'Fix this please',
+        description: 'Here is a description', 
+        category: 'Other',
+        status: 'In-progress', 
+        tried: 'Turning on/off',
+        author: 'Student #1',
+        dateAdded: '2/28/20'
+    },{
+        id: 1,
+        title: 'Fix this please',
+        description: 'Here is a description', 
+        category: 'Other',
+        status: 'In-progress', 
+        tried: 'Turning on/off',
+        author: 'Student #1',
+        dateAdded: '2/28/20'
+    },{
+        id: 2,
+        title: 'Fix this please',
+        description: 'Here is a description', 
+        category: 'Other',
+        status: 'In-progress', 
+        tried: 'Turning on/off',
+        author: 'Student #1',
+        dateAdded: '2/28/20'
+    },{
+        id: 3,
+        title: 'Fix this please',
+        description: 'Here is a description', 
+        category: 'Other',
+        status: 'In-progress', 
+        tried: 'Turning on/off',
+        author: 'Student #1',
+        dateAdded: '2/28/20'
+    },{
+        id: 4,
+        title: 'Fix this please',
+        description: 'Here is a description', 
+        category: 'Other',
+        status: 'In-progress', 
+        tried: 'Turning on/off',
+        author: 'Student #1',
+        dateAdded: '2/28/20'
+    }],
+    userTickets: [],
     token : localStorage.getItem("token")
 }
 
@@ -161,6 +210,23 @@ const devDeskReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: false,
                 error: action.payload
+            }
+        case FETCH_TICKETS_ID_START : 
+            return {
+                ...state,
+                isFetching: true,
+            }
+        case FETCH_TICKETS_ID_SUCCESS:
+            return {
+                ...state,
+                isFetching : false,
+                userTickets: action.payload,
+            }
+        case FETCH_TICKETS_ID_ERROR :
+            return {
+                ...state,
+                isFetching: false,
+                error : action.payload
             }
         default :
             return state

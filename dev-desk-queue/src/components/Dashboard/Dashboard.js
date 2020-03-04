@@ -156,7 +156,7 @@ const Dashboard = props => {
                 { renderLists(props.userType) }
             </div>
             <UserSettingsDialog email='user@email.com' open={open} handleClose={() => setOpen(false)} onUpdateUserSettingsRequest={(info) => console.log(info)}/>
-            <CreateTicketDialog categories={['React', 'Financial', 'Other']} open={createTicketOpen} handleClose={() => setCreateTicketOpen(false)} onUserCreateTicketRequest={ (info) => console.log(info)} />
+            <CreateTicketDialog categories={props.categories} open={createTicketOpen} handleClose={() => setCreateTicketOpen(false)} onUserCreateTicketRequest={ (info) => console.log(info)} />
             <EditTicketDialog 
                 ticket={ticketToEdit} 
                 userType='helper' 
@@ -172,6 +172,8 @@ const mapStateToProps = state => {
     return {
         userName: state.userName,
         userType: state.userType,
+        tickets : state.tickets,
+        categories: state.categories,
     }
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 //not deleted
 export const SIGNUP_START = "SIGNUP_START";
@@ -53,7 +53,7 @@ export const REMOVE_USER_ERROR = "REMOVE_USER_ERROR";
 export const removeUser = state => dispatch => {
     dispatch({type: REMOVE_USER_START})
     //needs id to remove user
-        return axios.delete("", state)
+        return axiosWithAuth().delete("", state)
             .then(res => {
                 //return status
                 dispatch({type: REMOVE_USER_SUCCESS})
@@ -73,7 +73,7 @@ export const CATEGORY_ERROR = "CATEGORY_ERROR";
 export const fetchCategories = () => dispatch => {
 
     dispatch({type: CATEGORY_START})
-    return axios.get("url")
+    return axiosWithAuth().get("url")
     .then(res => {
 
         dispatch({type: CATEGORY_SUCCESS, payload: res.data})
@@ -92,7 +92,7 @@ export const ADD_TICKET_ERROR = "ADD_TICKET_ERROR";
 export const addTicket = state => dispatch => {
     dispatch({type: ADD_TICKET_START})
 
-    return axios.post("auth url", state)
+    return axiosWithAuth().post("auth url", state)
     .then(res => {
         dispatch({type: ADD_TICKET_SUCCESS, payload: res.data})
 
@@ -110,7 +110,7 @@ export const FETCH_TICKETS_ERROR = "FETCH_TICKETS_ERROR";
 
 export const fetchTickets = () => dispatch => {
     dispatch({type: FETCH_TICKETS_START})
-    return axios.get("auth url")
+    return axiosWithAuth().get("auth url")
     .then(res => {
         
         dispatch({type: FETCH_TICKETS_SUCCESS, payload: res.data})
@@ -129,7 +129,7 @@ export const EDIT_TICKET_ERROR = "EDIT_TICKET_ERROR";
 export const editTicket = state => dispatch => {
     dispatch({type : EDIT_TICKET_START})
 
-    return axios.post("auth", state)
+    return axiosWithAuth().post("auth", state)
     .then(res => {
         dispatch({type: EDIT_TICKET_SUCCESS, payload: res.data})
 
@@ -141,13 +141,22 @@ export const editTicket = state => dispatch => {
 }
 
 
-export const FETCH_TICKETSBYID_START = "FETCH_TICKETSBYID_START";
-export const FETCH_TICKETSBYID_SUCCESS = "FETCH_TICKETSBYID_SUCCESS";
-export const FETCH_TICKETSBYID_ERROR = "FETCH_TICKETSBYID_ERROR";
+export const FETCH_TICKETS_ID_START = "FETCH_TICKETS_ID_START";
+export const FETCH_TICKETS_ID_SUCCESS = "FETCH_TICKETS_ID_SUCCESS";
+export const FETCH_TICKETS_ID_ERROR = "FETCH_TICKETS_ID_ERROR";
 
 export const fetchTicketById = state => dispatch => {
-    dispatch({type: FETCH_TICKETSBYID_START})
-    return axios.get("")
+    dispatch({type: FETCH_TICKETS_ID_START})
+    const { id } = state;
+    return axiosWithAuth()
+        .get(`/${id}`)
+        .then(res => {
+            dispatch({type : FETCH_TICKETS_ID_SUCCESS, payload: res.data})
+            
+        })
+        .catch(err => {
+            dispatch({type : FETCH_TICKETS_ID_ERROR, payload: err})
+        })
 }
 
 

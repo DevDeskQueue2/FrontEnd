@@ -56,12 +56,16 @@ const UserSettingsDialog = props => {
             
             <DialogActions>
 
+                <Button onClick={() => {}} color="secondary" >
+                    Delete Account
+                </Button>
                 <Button onClick={() => handleUpdateRequest()} color="primary">
                     Update
                 </Button>
                 <Button onClick={() => props.handleClose()} color="primary">
                     Cancel
                 </Button>
+                
                 
             </DialogActions>
 
