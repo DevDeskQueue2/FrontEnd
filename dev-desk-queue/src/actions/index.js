@@ -9,7 +9,7 @@ export const SIGNUP_ERROR = "SIGNUP_ERROR";
 
 export const signUp = state => dispatch => {
     dispatch({ type : SIGNUP_START})
-    return axios.post("https://dev-deskqueue2.herokuapp.com/api/auth/register", state)
+    return axios.post("https://dev2desk.herokuapp.com/api/auth/register", state)
         .then(res => {
             
             dispatch({type : SIGNUP_SUCCESS})
@@ -31,9 +31,10 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const login = state => dispatch => {
 
     dispatch({type :LOGIN_START})
-    return axios.post("https://dev-deskqueue2.herokuapp.com/api/auth/login", state)
+    return axios.post("https://dev2desk.herokuapp.com/api/auth/login", state)
     .then(res => {
-        localStorage.setItem("token", res.data)
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("userType", res.data.userType)
         dispatch({type: LOGIN_SUCCESS, payload: res.data})
 
     })
@@ -53,7 +54,7 @@ export const REMOVE_USER_ERROR = "REMOVE_USER_ERROR";
 export const removeUser = state => dispatch => {
     dispatch({type: REMOVE_USER_START})
     //needs id to remove user
-        return axiosWithAuth().delete("", state)
+        return axiosWithAuth().delete(`api/auth/${state}`)
             .then(res => {
                 //return status
                 dispatch({type: REMOVE_USER_SUCCESS})
@@ -61,6 +62,39 @@ export const removeUser = state => dispatch => {
             .catch(err=>{
                 dispatch({type: REMOVE_USER_ERROR, payload: err})
             })
+
+
+        // const promise = new Promise((res,reject)=>{
+        //     setTimeout(()=>{
+        //         dispatch({type: REMOVE_USER_START})
+        //         res(state)
+        //     },1000)
+        // })
+        // return promise.then((res)=>{
+        //     console.log("user deleted", res)
+
+        //     dispatch({type:REMOVE_USER_SUCCESS})
+
+        // })
+        // .catch((reject)=> console.log(reject))
+
+       
+}
+
+export const UPDATE_USER_START = "UPDATE_USER_START";
+export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
+export const UPDATE_USER_ERROR = "UPDATE_USER_ERROR";
+
+
+export const updateUser = state => dispatch => {
+    dispatch({type : UPDATE_USER_START})
+    return axiosWithAuth().put("",state)
+        .then(res => {
+            dispatch({type: UPDATE_USER_SUCCESS, payload: res.data})
+        })
+        .catch(err=>{
+            dispatch({type: UPDATE_USER_ERROR, payload: err})
+        })
 }
 
 

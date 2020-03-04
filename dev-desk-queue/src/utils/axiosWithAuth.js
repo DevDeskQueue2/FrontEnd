@@ -5,7 +5,7 @@ export const axiosWithAuth = () => {
 
     return axios
     .create({
-        baseURL: "https://dev-deskqueue2.herokuapp.com/",
+        baseURL: "https://dev2desk.herokuapp.com/",
         headers: {
             authorization : token
         }

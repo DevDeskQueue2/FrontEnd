@@ -13,9 +13,10 @@ const Onboarding = props => {
     const renderOnboardComponent = (renderLogin) => {
         if(renderLogin) {
             return <Login 
-                        onUserLoginRequest={ (info) => { 
-                            console.log(info); 
-                            props.login(info).then(() => props.history.push('/dashboard'));
+                        onUserLoginRequest={ ({email, password}) => { 
+                            console.log("onUserLoginRequest"); 
+                            props.login({"username": email, password}).then(() => props.history.push("/dashboard"));
+                            // props.login(info).then(() => props.history.push('/dashboard'));
                         } } 
                         onRequestToRegister={ () => setIsLogin(false) }
                     />
@@ -23,10 +24,11 @@ const Onboarding = props => {
             return <Register 
                     onRequestToLogin={ () => setIsLogin(true) } 
                     onUserRegisterRequest={ ({email, password, isHelper}) => { 
+                        
                         const userType = isHelper ? 1 : 0
                         // console.log(info);
                         
-                        props.signUp({email, password, userType}).then(()=> setIsLogin(true))
+                        props.signUp({username: email, password, userType}).then(()=> setIsLogin(true))
                         // setIsLogin(true); 
                     }}
                 />

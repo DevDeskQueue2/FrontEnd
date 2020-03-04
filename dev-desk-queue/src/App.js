@@ -3,6 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import Onboarding from './components/Onboarding/Onboarding';
 import Dashboard from './components/Dashboard/Dashboard';
 import TicketManager from './components/Tickets/TicketManager';
+
+import PrivateRoute from "./utils/PrivateRoute";
 import './App.css';
 
 function App() {
@@ -10,8 +12,8 @@ function App() {
     <div className="App">
       <Switch>
         <Route exact path='/' component={Onboarding} />
-        <Route path='/dashboard' component={Dashboard} />
-        <Route path='/ticket-manager' component={TicketManager}/>
+        <PrivateRoute path='/dashboard' component={Dashboard} />
+        <PrivateRoute path='/ticket-manager' component={TicketManager}/>
       </Switch>
     </div>
   );

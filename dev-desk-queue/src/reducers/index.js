@@ -8,6 +8,9 @@ import {
     REMOVE_USER_START,
     REMOVE_USER_SUCCESS,
     REMOVE_USER_ERROR,
+    UPDATE_USER_START,
+    UPDATE_USER_SUCCESS,
+    UPDATE_USER_ERROR,
     CATEGORY_START,
     CATEGORY_SUCCESS,
     CATEGORY_ERROR,
@@ -27,9 +30,10 @@ import {
 
 
 const initialState = {
-    userName: "",
-    userType : "student",
-    currentType: "",
+    username: "",
+    userType : "",
+    userId: "",
+    // currentType: "",
     error: "",
     isRegistered : false,
     isFetching : false,
@@ -116,8 +120,10 @@ const devDeskReducer = (state = initialState, action) => {
                 ...state,
                 isRegistered: false,
                 isFetching :false,
-                token : action.payload
-
+                token : action.payload.token,
+                username: action.payload.username,
+                userId: action.payload.id,
+                userType: action.payload.userType === "1" ? "helper" : "student" 
             }
         case LOGIN_ERROR: 
             return {
@@ -139,6 +145,24 @@ const devDeskReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: false,
                 error: action.payload.message,
+            }
+        case UPDATE_USER_START: 
+            return {
+                ...state,
+                isFetching: true,
+
+            }
+        case UPDATE_USER_SUCCESS:
+            return {
+                ...state,
+                isFetching: false,
+                //userName: action.payload
+            }
+        case UPDATE_USER_ERROR:
+            return {
+                ...state,
+                isFetching: false,
+                error: action.payload,
             }
         case CATEGORY_START:
             return {
