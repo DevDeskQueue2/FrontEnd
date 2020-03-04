@@ -10,7 +10,7 @@ const TicketList = props => {
                 <div className='ticket-list'>
                  {
                         props.tickets.map( ticket => {
-                            return <GeneralTicket onTicketClick={(id) => props.onTicketClick(id)} userType={props.userType} ticket={ticket} />
+                            return <GeneralTicket onTicketClick={(id) => props.onTicketClick(id)} ticket={ticket} />
                         })
                  }
                 </div>
@@ -20,7 +20,7 @@ const TicketList = props => {
                 <div className='small-ticket-list'>
                     {
                         props.tickets.map( ticket => {
-                            return <SmallGeneralTicket onTicketClick={(id) => props.onTicketClick(id)} userType={props.userType} ticket={ticket}/>
+                            return <SmallGeneralTicket onTicketClick={(id) => props.onTicketClick(id)}  ticket={ticket}/>
                         })
                     }
                 </div>

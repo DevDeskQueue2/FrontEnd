@@ -2,6 +2,8 @@ import React from 'react';
 import MenuSearch from './MenuSearch';
 import TextSearch from './TextSearch';
 
+import {connect} from "react-redux";
+
 const SearchBar = props => {
 
     const [searchParams, setSearchParams] = React.useState({})
@@ -12,14 +14,18 @@ const SearchBar = props => {
     }, [searchParams])
 
     const renderHelperSearchBar = () => {
-        if(props.userType === 'helper') {
+        if(props.userType === '1') {
             return (
                 <MenuSearch 
                     menu={['Newest', 'Oldest']}
                     defaultValue='Oldest' 
                     type='date-added' 
                     placeholder='Date Added' 
-                    onUserMenuRequest={(obj) => setSearchParams({ ...searchParams, [obj.type]: obj.value})} />
+                    onUserMenuRequest={(obj) => {
+                        console.log(obj)
+                        setSearchParams({ ...searchParams, [obj.type]: obj.value})
+                    }} 
+                />
             )
         }
     }
@@ -50,4 +56,9 @@ const SearchBar = props => {
     )
 }
 
-export default SearchBar;
+const mapStateToProps = state => {
+    return {
+        userType : state.userType,
+    }
+}
+export default connect(mapStateToProps,{})(SearchBar);

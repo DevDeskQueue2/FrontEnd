@@ -18,9 +18,11 @@ const UserSettingsDialog = props => {
 
 
     const [info, setInfo] = React.useState({
-        email: props.email,
+        username: props.username,
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        userType: props.userType,
+        
     })
 
     console.log("info", info)
@@ -34,16 +36,17 @@ const UserSettingsDialog = props => {
     const handleUpdateRequest = () => {
         // this function will validate the user input, if password is '', do not update
         // props.onUpdateUserSettingsRequest(info);
-        props.updateUser(info)
+
+        props.updateUser({...info, id: props.userId}).then(()=>{
+            props.handleClose();
+        })
         
-        props.handleClose();
+        // props.handleClose();
     }
 
     const removeUser = () => {
         props.removeUser(props.userId)
             .then(() => {
-
-                props.handleClose();
 
                 history.push("/")     
             })
@@ -55,10 +58,10 @@ const UserSettingsDialog = props => {
                 <h2>Update Your Settings</h2>
                 <h4>Enter details below:</h4>
                 <TextField 
-                    label='Email' 
+                    label='User name' 
                     type='text' 
-                    name='email' 
-                    value={info.email} 
+                    name='username' 
+                    value={info.username} 
                     onChange={(evt) => handleChange(evt)} />
                 <br />
                 <TextField 
@@ -98,8 +101,10 @@ const UserSettingsDialog = props => {
 
 const mapStateToProps = state => {
     return {
-        email : state.email,
+        username : state.username,
         userId: state.userId,
+        userType: state.userType,
+
     }
 }
 

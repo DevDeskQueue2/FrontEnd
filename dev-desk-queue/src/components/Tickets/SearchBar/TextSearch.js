@@ -5,8 +5,13 @@ const TextSearch = props => {
         <div className='text-search'>
             <input 
                 type='text' 
-                placeholder={props.placeholder} 
-                onChange={(evt) => props.onUserTextRequest({[props.type]: evt.target.value})} />
+                placeholder={props.placeholder}
+                name={props.type}
+                onChange={(evt) => {
+                    props.onUserTextRequest({[evt.target.name]: evt.target.value})
+                    console.log(evt.target.value)
+                }} 
+            />
         </div>
     )
 }

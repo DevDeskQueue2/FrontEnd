@@ -1,9 +1,10 @@
 import React from 'react';
+import {connect} from "react-redux"
 
 const SmallGeneralTicket = props => {
 
     const renderHelperInformation = () => {
-        if(props.userType === 'helper') {
+        if(props.userType === '1') {
             return (
                     <h4>Author: {props.ticket.author}</h4>
             )
@@ -11,7 +12,7 @@ const SmallGeneralTicket = props => {
     }
 
     const renderStudentInformation = () => {
-        if(props.userType === 'student') {
+        if(props.userType === '0') {
             return (
                 <h4>Helper: {props.ticket.helper}</h4>
             )
@@ -39,4 +40,10 @@ const SmallGeneralTicket = props => {
     )
 }
 
-export default SmallGeneralTicket;
+const mapStateToProps = state => {
+    return {
+        userType: state.userType,
+
+    }
+}
+export default connect(mapStateToProps,{})(SmallGeneralTicket);

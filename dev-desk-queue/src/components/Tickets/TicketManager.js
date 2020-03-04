@@ -9,33 +9,42 @@ import TicketList from './TicketList';
 
 import data from '../../data/dummyData';
 
+import {fetchTickets,fetchCategories} from "../../actions";
+
 
 
 const TicketManager = props => {
+
+    
     const getLinkList = (userType) => {
         // this functino return the correct nav texts based on user type
-        if(userType === 'helper') {
+        if(userType === '1') {
             return [
                 {
+                    id: "dashboard",
                     name: 'Dashboard',
                     route: '/dashboard'
                 }, 
                 {
+                    id: "settings",
                     name: 'Settings',
                     route: '/settings'
                 }
             ]
-        } else if(userType === 'student') {
+        } else if(userType === '0') {
             return [
                 {
+                    id: "dashboard",
                     name: 'Dashboard',
                     route: '/dashboard'
                 }, 
                 {
+                    id: "create a ticket",
                     name: 'Create a Ticket',
                     route: '/create-a-ticket'
                 },
                 {
+                    id: "settings",
                     name: 'Settings',
                     route: '/settings'
                 }
@@ -54,8 +63,22 @@ const TicketManager = props => {
     const [createTicketOpen, setCreateTicketOpen] = React.useState(false);
     const [editTicketOpen, setEditTicketOpen] = React.useState(false);
     const [ticketToEdit, setTicketToEdit] = React.useState(initialInfo);
-    const [tickets, setTickets] = React.useState(data);
-    const [ticketsToDisplay, setTicketsToDisplay] = React.useState(data);
+    const [tickets, setTickets] = React.useState(props.tickets);
+    const [ticketsToDisplay, setTicketsToDisplay] = React.useState([]);
+
+    React.useEffect(()=>{
+
+        const getCategories = () =>{
+            props.fetchCategories()
+        }
+
+
+  
+            props.fetchTickets()
+        
+        getCategories();
+       
+    },[])
 
     React.useEffect( () => {
         console.log('ticket clicked', ticketToEdit);
@@ -98,16 +121,16 @@ const TicketManager = props => {
 
     const onTicketClick = id => {
         //this function will grab the ticket and populate the EditTicketDialog
-        setTicketToEdit( tickets.filter( ticket => { return ticket.id === id } )[0])
+        setTicketToEdit( props.tickets.filter( ticket => { return ticket.id === id } )[0])
     }
 
     return (
         <div className='ticket-manager-container'>
-            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList('helper')}/>
+            <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList(props.userType)}/>
             
             <div className='ticket-manager'>
-                <SearchBar userType='helper' categories={['All', 'React', 'Financial', 'Other']}onSearchRequest={ (params) => doSearch(params)} />
-                <TicketList size='large' userType='helper' tickets={ticketsToDisplay} onTicketClick={(id) => onTicketClick(id)}/>
+                <SearchBar categories={props.categories} onSearchRequest={ (params) => doSearch(params)} />
+                <TicketList size='large'  tickets={props.tickets} onTicketClick={(id) => onTicketClick(id)}/>
             </div>
 
             <UserSettingsDialog 
@@ -117,7 +140,7 @@ const TicketManager = props => {
                 onUpdateUserSettingsRequest={(info) => console.log(info)}/>
             
             <CreateTicketDialog 
-                categories={['React', 'Financial', 'Other']} 
+                categories={props.categories} 
                 open={createTicketOpen} 
                 handleClose={() => setCreateTicketOpen(false)} 
                 onUserCreateTicketRequest={ (info) => console.log(info)} />
@@ -126,7 +149,7 @@ const TicketManager = props => {
                 ticket={ticketToEdit} 
                 userType='student' 
                 open={editTicketOpen} 
-                categories={['React', 'Financial', 'Other']} 
+                categories={props.categories} 
                 handleClose={() => handleCloseEdit()} 
                 onUserEditTicketRequest={ (info) => console.log(info)} />
 
@@ -137,7 +160,13 @@ const TicketManager = props => {
 const mapStateToProps = state => {
     return {
         tickets : state.tickets,
+        userType: state.userType,
+        categories: state.categories,
+
     }
 }
 
-export default connect(mapStateToProps, {})(TicketManager);
+export default connect(mapStateToProps, {
+    fetchTickets,
+    fetchCategories
+})(TicketManager);

@@ -34,7 +34,8 @@ export const login = state => dispatch => {
     return axios.post("https://dev2desk.herokuapp.com/api/auth/login", state)
     .then(res => {
         localStorage.setItem("token", res.data.token)
-        localStorage.setItem("userType", res.data.userType)
+        const user = JSON.stringify(res.data)
+        localStorage.setItem("userInfo", user)
         dispatch({type: LOGIN_SUCCESS, payload: res.data})
 
     })
@@ -54,29 +55,14 @@ export const REMOVE_USER_ERROR = "REMOVE_USER_ERROR";
 export const removeUser = state => dispatch => {
     dispatch({type: REMOVE_USER_START})
     //needs id to remove user
-        return axiosWithAuth().delete(`api/auth/${state}`)
-            .then(res => {
-                //return status
-                dispatch({type: REMOVE_USER_SUCCESS})
-            })
-            .catch(err=>{
-                dispatch({type: REMOVE_USER_ERROR, payload: err})
-            })
-
-
-        // const promise = new Promise((res,reject)=>{
-        //     setTimeout(()=>{
-        //         dispatch({type: REMOVE_USER_START})
-        //         res(state)
-        //     },1000)
-        // })
-        // return promise.then((res)=>{
-        //     console.log("user deleted", res)
-
-        //     dispatch({type:REMOVE_USER_SUCCESS})
-
-        // })
-        // .catch((reject)=> console.log(reject))
+    return axiosWithAuth().delete(`api/auth/${state}`)
+        .then(res => {
+            //return status
+            dispatch({type: REMOVE_USER_SUCCESS, payload: res.data.message})
+        })
+        .catch(err=>{
+            dispatch({type: REMOVE_USER_ERROR, payload: err})
+        })
 
        
 }
@@ -86,9 +72,11 @@ export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
 export const UPDATE_USER_ERROR = "UPDATE_USER_ERROR";
 
 
-export const updateUser = state => dispatch => {
+export const updateUser = ({username, id, password, userType}) => dispatch => {
     dispatch({type : UPDATE_USER_START})
-    return axiosWithAuth().put("",state)
+
+
+    return axiosWithAuth().put(`/api/auth/${id}`,{username, password, userType})
         .then(res => {
             dispatch({type: UPDATE_USER_SUCCESS, payload: res.data})
         })
@@ -107,7 +95,7 @@ export const CATEGORY_ERROR = "CATEGORY_ERROR";
 export const fetchCategories = () => dispatch => {
 
     dispatch({type: CATEGORY_START})
-    return axiosWithAuth().get("url")
+    return axiosWithAuth().get("api/categories")
     .then(res => {
 
         dispatch({type: CATEGORY_SUCCESS, payload: res.data})
@@ -144,7 +132,7 @@ export const FETCH_TICKETS_ERROR = "FETCH_TICKETS_ERROR";
 
 export const fetchTickets = () => dispatch => {
     dispatch({type: FETCH_TICKETS_START})
-    return axiosWithAuth().get("auth url")
+    return axiosWithAuth().get("api/tickets")
     .then(res => {
         
         dispatch({type: FETCH_TICKETS_SUCCESS, payload: res.data})

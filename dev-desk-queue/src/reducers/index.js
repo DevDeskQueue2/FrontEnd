@@ -29,61 +29,18 @@ import {
 } from "../actions/index";
 
 
+const {username, userType, userId, } = JSON.parse(localStorage.getItem("userInfo"))
+
 const initialState = {
-    username: "",
-    userType : "",
-    userId: "",
+    username: username,
+    userType : userType,
+    userId: userId,
     // currentType: "",
     error: "",
     isRegistered : false,
     isFetching : false,
     categories: [],
-    tickets : [ {
-        id: 0,
-        title: 'Fix this please',
-        description: 'Here is a description', 
-        category: 'Other',
-        status: 'In-progress', 
-        tried: 'Turning on/off',
-        author: 'Student #1',
-        dateAdded: '2/28/20'
-    },{
-        id: 1,
-        title: 'Fix this please',
-        description: 'Here is a description', 
-        category: 'Other',
-        status: 'In-progress', 
-        tried: 'Turning on/off',
-        author: 'Student #1',
-        dateAdded: '2/28/20'
-    },{
-        id: 2,
-        title: 'Fix this please',
-        description: 'Here is a description', 
-        category: 'Other',
-        status: 'In-progress', 
-        tried: 'Turning on/off',
-        author: 'Student #1',
-        dateAdded: '2/28/20'
-    },{
-        id: 3,
-        title: 'Fix this please',
-        description: 'Here is a description', 
-        category: 'Other',
-        status: 'In-progress', 
-        tried: 'Turning on/off',
-        author: 'Student #1',
-        dateAdded: '2/28/20'
-    },{
-        id: 4,
-        title: 'Fix this please',
-        description: 'Here is a description', 
-        category: 'Other',
-        status: 'In-progress', 
-        tried: 'Turning on/off',
-        author: 'Student #1',
-        dateAdded: '2/28/20'
-    }],
+    tickets : [],
     userTickets: [],
     token : localStorage.getItem("token")
 }
@@ -123,7 +80,7 @@ const devDeskReducer = (state = initialState, action) => {
                 token : action.payload.token,
                 username: action.payload.username,
                 userId: action.payload.id,
-                userType: action.payload.userType === "1" ? "helper" : "student" 
+                userType: action.payload.userType,
             }
         case LOGIN_ERROR: 
             return {
@@ -139,6 +96,7 @@ const devDeskReducer = (state = initialState, action) => {
         case REMOVE_USER_SUCCESS: 
             return {
                 ...initialState,
+                message: action.payload,
             }
         case REMOVE_USER_ERROR:
             return {
@@ -156,13 +114,15 @@ const devDeskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: false,
-                //userName: action.payload
+                username: action.payload.username,
+                userType: action.payload.userType,
+                userId: action.payload.id,
             }
         case UPDATE_USER_ERROR:
             return {
                 ...state,
                 isFetching: false,
-                error: action.payload,
+                error: action.payload.errorMessage,
             }
         case CATEGORY_START:
             return {
@@ -174,7 +134,7 @@ const devDeskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: false,
-                category: action.payload
+                categories: action.payload
             }
         case CATEGORY_ERROR:
             return {

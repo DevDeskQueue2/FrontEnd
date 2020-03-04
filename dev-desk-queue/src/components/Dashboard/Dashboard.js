@@ -36,7 +36,7 @@ const Dashboard = props => {
 
     const getLinkList = (userType) => {
         // this functino return the correct nav texts based on user type
-        if(userType === 'helper') {
+        if(userType === "1") {
             return [
                 {
                     name: 'Ticket Manager',
@@ -47,7 +47,7 @@ const Dashboard = props => {
                     route: '/settings'
                 }
             ]
-        } else if(userType === 'student') {
+        } else if(userType === "0") {
             return [
                 {
                     name: 'Ticket Manager',
@@ -92,8 +92,8 @@ const Dashboard = props => {
 
     const currentTicket = {
         id: 10,
-        title: 'Fix this please',
-        description: 'Here is a description', 
+        title: 'Fix please',
+        description: 'Here description', 
         category: 'Other',
         status: 'In-progress', 
         tried: 'Turning on/off',
@@ -107,7 +107,7 @@ const Dashboard = props => {
     }
 
     const renderCurrentItem = (userType) => {
-        if(userType === 'helper') {
+        if(userType === "1") {
             return (
                 <div className='current-ticket'>
                     <h3>Current Ticket</h3>
@@ -118,7 +118,7 @@ const Dashboard = props => {
     }
 
     const renderLists = (userType) => {
-        if(userType === 'student') {
+        if(userType === "0") {
             return (
                 <div className='ticket-lists'>
                     <div className='resolved-tickets'>
@@ -135,7 +135,7 @@ const Dashboard = props => {
                     </div>
                 </div>
             )
-        } else if(userType === 'helper') {
+        } else if(userType === "1") {
             return (
                 <div className='ticket-lists'>
                     <div className='assigned-tickets'>
