@@ -138,7 +138,12 @@ const TicketManager = props => {
         //this function will grab the ticket and populate the EditTicketDialog
 
         /////////////////////////////////////////////////added the ticket.ticket
-        setTicketToEdit( props.tickets.filter( ticket => { return ticket.ticket.id === id } )[0])
+        if(props.userType === "1"){
+            setTicketToEdit( props.tickets.filter( ticket => { return ticket.ticket.id === id } )[0])
+        } else {
+            setTicketToEdit( props.userTickets.filter( ticket => { return ticket.ticket.id === id } )[0])
+        }
+        
     }
 
     return (
@@ -147,7 +152,11 @@ const TicketManager = props => {
             
             <div className='ticket-manager'>
                 <SearchBar categories={props.categories} onSearchRequest={ (params) => doSearch(params)} />
-                <TicketList size='large'  tickets={props.tickets} onTicketClick={(id) => onTicketClick(id)}/>
+                {props.userType==="1" ? 
+                    <TicketList size='large'  tickets={props.tickets} onTicketClick={(id) => onTicketClick(id)}/>
+                    :
+                    <TicketList size="large" tickets = {props.userTickets} onTicketClick={(id)=> onTicketClick(id)}/>
+                }
             </div>
 
             <UserSettingsDialog 
@@ -179,6 +188,7 @@ const mapStateToProps = state => {
         userType: state.userType,
         categories: state.categories,
         userId: state.userId,
+        userTickets: state.userTickets,
     }
 }
 

@@ -14,6 +14,7 @@ const Dashboard = props => {
 
 
     React.useEffect(()=>{
+
         props.fetchCategories();
 
         if(props.userType==="1") {

@@ -33,8 +33,9 @@ const GeneralTicket = props => {
             <h4>Category: {props.ticket.ticket.category}</h4>
             {/* <h4>Date Added: {props.ticket.ticket.dateAdded}</h4> */}
         
-            { renderHelperInformation() }
-            { renderStudentInformation() }
+            {/* { renderHelperInformation() }
+            { renderStudentInformation() } */}
+            {props.userType === "1"?  <div>Student Name : {props.ticket.student.username}</div>: null}
 
         </div>
     )

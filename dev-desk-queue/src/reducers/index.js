@@ -29,12 +29,13 @@ import {
 } from "../actions/index";
 
 
-const {username, userType, id } = JSON.parse(localStorage.getItem("userInfo"))
+const User = JSON.parse(localStorage.getItem("userInfo"))
 
 const initialState = {
-    username: username,
-    userType : userType,
-    userId: id,
+    userInfo: User,
+    username: User? User.username : "",
+    userType : User? User.userType : "",
+    userId: User? User.id : "",
     // currentType: "",
     error: "",
     isRegistered : false,
