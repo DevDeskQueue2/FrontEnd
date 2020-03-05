@@ -188,7 +188,6 @@ const devDeskReducer = (state = initialState, action) => {
             return{
                 ...state,
                 isFetching: false,
-                tickets: action.payload
             }
         case EDIT_TICKET_ERROR:
             return {

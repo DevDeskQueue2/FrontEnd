@@ -11,16 +11,16 @@ const SmallGeneralTicket = props => {
         }
     }
 
-    const renderStudentInformation = () => {
-        if(props.userType === '0') {
-            return (
-                <h4>Helper: {props.ticket.helper}</h4>
-            )
-        }
-    }
+    // const renderStudentInformation = () => {
+    //     if(props.userType === '0') {
+    //         return (
+    //             <h4>Helper: {props.ticket.helper}</h4>
+    //         )
+    //     }
+    // }
 
     return (
-        <div className='small-general-ticket' onClick={() => props.onTicketClick(props.ticket.id)}>
+        <div className='small-general-ticket' onClick={() => props.onTicketClick(props.ticket.ticket.id)}>
             {/* This ticket will display all of the information and not be editable, when clicked will have a popup */}
             
             <div className='small-status-container'>
@@ -28,13 +28,9 @@ const SmallGeneralTicket = props => {
             </div>
             
             <h4>Title: {props.ticket.ticket.title}</h4>
-            {/* <p>Description: {props.ticket.description}</p> */}
-            {/* <p>What I've tried: {props.ticket.tried}</p> */}
+
             <h4>Category: {props.ticket.ticket.category}</h4>
-            {/* <h4>Date Added: {props.ticket.dateAdded}</h4> */}
-        
-            {/* { renderHelperInformation() } */}
-            {/* { renderStudentInformation() } */}
+
 
         </div>
     )

@@ -151,10 +151,13 @@ export const EDIT_TICKET_ERROR = "EDIT_TICKET_ERROR";
 export const editTicket = state => dispatch => {
     dispatch({type : EDIT_TICKET_START})
 
-    return axiosWithAuth().post("auth", state)
-    .then(res => {
-        dispatch({type: EDIT_TICKET_SUCCESS, payload: res.data})
+    const { title, description, tried, category,studentId} = state.ticket;
 
+    return axiosWithAuth().put(`/api/tickets/${state.ticket.id}/students/`, {title, description, tried,category})
+    .then((res,studentId) => {
+        dispatch({type: EDIT_TICKET_SUCCESS, payload: res.data});
+        console.log(studentId)
+        // dispatch(fetchStudentTicketsId(state.studentId));
     })
     .catch(err=> {
         dispatch({type: EDIT_TICKET_ERROR, payload: err})
