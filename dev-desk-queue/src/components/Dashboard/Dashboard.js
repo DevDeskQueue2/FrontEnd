@@ -111,7 +111,11 @@ const Dashboard = props => {
     }
 
     const onTicketClick = id => {
-        setTicketToEdit(currentTicket)
+        if(props.userType === "1"){
+            setTicketToEdit( props.tickets.filter( ticket => { return ticket.ticket.id === id } )[0])
+        } else {
+            setTicketToEdit( props.userTickets.filter( ticket => { return ticket.ticket.id === id } )[0])
+        }
     }
 
     const currentTicket = {
@@ -137,7 +141,7 @@ const Dashboard = props => {
             return (
                 <div className='current-ticket'>
                     <h3>Current Ticket</h3>
-                    {props.userTickets.length > 0 ? <GeneralTicket onTicketClick={(id) => onTicketClick(id)} userType={props.userType} ticket={currentTicket} /> : "No Current Tickets"}
+                    {props.userTickets.length > 0 ? <GeneralTicket onTicketClick={(id) => onTicketClick(id)} ticket={currentTicket} /> : "No Current Tickets"}
                 </div>
             )
         }
@@ -189,7 +193,6 @@ const Dashboard = props => {
                 categories={props.categories} 
                 open={createTicketOpen} 
                 handleClose={() => setCreateTicketOpen(false)} 
-                onUserCreateTicketRequest={ (info) => props.addTicket(info)} 
             />
 
             <EditTicketDialog 
@@ -197,7 +200,8 @@ const Dashboard = props => {
                 open={editTicketOpen} 
                 categories={props.categories} 
                 handleClose={() => handleCloseEdit()} 
-                onUserEditTicketRequest={ (info) => console.log(info)} />
+                // onUserEditTicketRequest={ (info) => console.log(info)} 
+            />
         </div>
     )
 }

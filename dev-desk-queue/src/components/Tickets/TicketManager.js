@@ -167,16 +167,16 @@ const TicketManager = props => {
             <CreateTicketDialog 
                 categories={props.categories} 
                 open={createTicketOpen} 
-                handleClose={() => setCreateTicketOpen(false)} 
-                onUserCreateTicketRequest={ (info) => console.log(info)} />
+                handleClose={() => setCreateTicketOpen(false)}
+            />
             
             <EditTicketDialog 
                 ticket={ticketToEdit} 
-                userType='student' 
                 open={editTicketOpen} 
                 categories={props.categories} 
                 handleClose={() => handleCloseEdit()} 
-                onUserEditTicketRequest={ (info) => console.log(info)} />
+                // onUserEditTicketRequest={ (info) => console.log(info)} 
+            />
 
         </div>
     )

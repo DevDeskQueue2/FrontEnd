@@ -7,8 +7,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
 import {connect} from "react-redux";
+import {addTicket,fetchStudentTicketsId} from "../../actions";
+
 
 const CreateTicketDialog = props => {
+
+    
 
     const initialInfo = {
         id: props.userId,
@@ -30,10 +34,15 @@ const CreateTicketDialog = props => {
 
     const handleCreateRequest = () => {
         // this function will send the ticket information back to whomever called it
-        props.onUserCreateTicketRequest(info);
+        // props.onUserCreateTicketRequest(info);
+        props.addTicket(info)
         setInfo(initialInfo)
         props.handleClose();
     }
+
+    React.useEffect(()=>{
+        props.fetchStudentTicketsId(props.userId)
+    },[props.addTicket])
 
     return (
         <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
@@ -102,4 +111,7 @@ const mapStateToProps = state => {
 
     }
 }
-export default connect(mapStateToProps, {})(CreateTicketDialog);
+export default connect(mapStateToProps, {
+    fetchStudentTicketsId,
+    addTicket,
+})(CreateTicketDialog);

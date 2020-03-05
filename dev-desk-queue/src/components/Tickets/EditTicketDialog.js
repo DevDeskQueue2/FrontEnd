@@ -8,7 +8,7 @@ import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
 
 import {connect} from "react-redux";
-import {assignTicket} from "../../actions";
+import {assignTicket,editTicket} from "../../actions";
 
 const EditTicketDialog = props => {
 
@@ -47,6 +47,7 @@ const EditTicketDialog = props => {
     }, [props.open])
 
     const handleChange = evt => {
+        console.log(evt.target)
         setInfo({
             ...info,
             ticket: {
@@ -67,7 +68,12 @@ const EditTicketDialog = props => {
         // setInfo(initialInfo)
         // props.handleClose();
 
-        console.log(props.ticket)
+        props.editTicket(info).then(()=>{
+            props.handleClose();
+        })
+        
+
+        console.log(info)
     }
 
     const handleAssignRequest = () => {
@@ -83,6 +89,7 @@ const EditTicketDialog = props => {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
+                        name="category"
                         value={info.ticket.category}
                         onChange={evt => handleChange(evt)}
                     >
@@ -158,9 +165,10 @@ const EditTicketDialog = props => {
             <DialogActions>
 
                 { props.userType ? renderAssignButton() : null }
-                <Button disabled= {props.userId !== info.studentId} onClick={() => handleEditRequest()} color="primary">
+                {props.userId === info.studentId ? <Button onClick={()=>handleEditRequest()}>Edit</Button>: null}
+                {/* <Button disabled= {props.userId !== info.studentId} onClick={() => handleEditRequest()} color="primary">
                     Edit
-                </Button>
+                </Button> */}
                 <Button onClick={() => props.handleClose()} color="primary">
                     Cancel
                 </Button>
@@ -181,5 +189,6 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps,{
     assignTicket,
+    editTicket,
 
 })(EditTicketDialog);
