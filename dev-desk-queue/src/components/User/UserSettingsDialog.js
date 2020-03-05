@@ -16,14 +16,15 @@ const UserSettingsDialog = props => {
     let history = useHistory();
 
 
-
-    const [info, setInfo] = React.useState({
+    const initialInfo = {
         username: props.username,
         password: '',
         confirmPassword: '',
         userType: props.userType,
-        
-    })
+    }
+
+
+    const [info, setInfo] = React.useState(initialInfo)
 
     console.log("info", info)
     const handleChange = evt => {
@@ -37,9 +38,7 @@ const UserSettingsDialog = props => {
         // this function will validate the user input, if password is '', do not update
         // props.onUpdateUserSettingsRequest(info);
 
-        props.updateUser({...info, id: props.userId}).then(()=>{
-            props.handleClose();
-        })
+        props.updateUser({...info, id: props.userId}).then(()=>props.handleClose())
         
         // props.handleClose();
     }
@@ -53,7 +52,8 @@ const UserSettingsDialog = props => {
     }
 
     return (
-        <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
+        <Dialog 
+            open={props.open} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
             <DialogContent>
                 <h2>Update Your Settings</h2>
                 <h4>Enter details below:</h4>
@@ -88,7 +88,12 @@ const UserSettingsDialog = props => {
                 <Button onClick={() => handleUpdateRequest()} color="primary">
                     Update
                 </Button>
-                <Button onClick={() => props.handleClose()} color="primary">
+                <Button onClick={() => {
+                        setInfo(initialInfo);
+                        props.handleClose();
+                    }} 
+                    color="primary"
+                >
                     Cancel
                 </Button>
                 

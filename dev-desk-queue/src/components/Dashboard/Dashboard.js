@@ -8,18 +8,41 @@ import GeneralTicket from '../Tickets/GeneralTicket';
 import TicketList from '../Tickets/TicketList';
 
 
-import {editTicket, addTicket, fetchCategories, fetchTickets} from "../../actions";
+import {editTicket, addTicket, fetchCategories, fetchHelperTicketsId, fetchStudentTicketsId} from "../../actions";
 
 const Dashboard = props => {
 
+
+    React.useEffect(()=>{
+        props.fetchCategories();
+
+        if(props.userType==="1") {
+            //helper
+            props.fetchHelperTicketsId(props.userId);
+            console.log("helper")
+        } else {
+            console.log("student")
+            props.fetchStudentTicketsId(props.userId);
+        }
+    },[])
+
     const initialTicketToEdit = {
-        id: 0,
-        title: '',
-        description: '', 
-        category: '',
-        status: '', 
-        tried: '',
-        dateAdded: ''
+        helper : {
+            id: "",
+            username: ""
+        },
+        student : {
+            id: "",
+            username: ""
+        },
+        ticket : {
+            category: "",
+            description : "",
+            id : "",
+            status : "",
+            title: "",
+            tried: "",
+        }
     }
 
     const [open, setOpen] = React.useState(false);
@@ -29,7 +52,7 @@ const Dashboard = props => {
 
     React.useEffect( () => {
         console.log('ticket clicked', ticketToEdit);
-        if(ticketToEdit.title !== '') {
+        if(ticketToEdit.ticket.title !== '') {
             setEditTicketOpen(true);
         }
     }, [ticketToEdit])
@@ -98,7 +121,9 @@ const Dashboard = props => {
         status: 'In-progress', 
         tried: 'Turning on/off',
         author: 'Student #1',
-        dateAdded: '2/28/20'
+        ticket: {
+            status: "In-Progress"
+        }
     }
 
     const handleCloseEdit = () => {
@@ -111,7 +136,7 @@ const Dashboard = props => {
             return (
                 <div className='current-ticket'>
                     <h3>Current Ticket</h3>
-                    <GeneralTicket onTicketClick={(id) => onTicketClick(id)} userType={props.userType} ticket={currentTicket} />
+                    {props.userTickets.length > 0 ? <GeneralTicket onTicketClick={(id) => onTicketClick(id)} userType={props.userType} ticket={currentTicket} /> : "No Current Tickets"}
                 </div>
             )
         }
@@ -119,6 +144,7 @@ const Dashboard = props => {
 
     const renderLists = (userType) => {
         if(userType === "0") {
+            //student
             return (
                 <div className='ticket-lists'>
                     <div className='resolved-tickets'>
@@ -130,17 +156,18 @@ const Dashboard = props => {
                         <TicketList size='small' userType='student' tickets={[]} onTicketClick={(id) => onTicketClick(id)}/>
                     </div>
                     <div className='assigned-tickets'>
-                        <h3>Assigned Tickets</h3>
-                        <TicketList size='small' userType='student' tickets={[]} onTicketClick={(id) => onTicketClick(id)}/>
+                        <h3>Created Tickets</h3>
+                        <TicketList size='small' tickets={props.userTickets} onTicketClick={(id) => onTicketClick(id)}/>
                     </div>
                 </div>
             )
         } else if(userType === "1") {
+            //helper
             return (
                 <div className='ticket-lists'>
                     <div className='assigned-tickets'>
                         <h3>Assigned Tickets</h3>
-                        <TicketList size='small' userType='student' tickets={[currentTicket, currentTicket, currentTicket]} onTicketClick={(id) => onTicketClick(id)}/>
+                        {props.userTickets.length > 0 ? <TicketList size='small' tickets={[]} onTicketClick={(id) => onTicketClick(id)}/> : <div><p>No Assigened Tickets</p><p>Go to Ticket Manager to add tickets</p></div>}
                     </div>
                 </div>
             )
@@ -155,13 +182,19 @@ const Dashboard = props => {
                 { renderCurrentItem(props.userType) }
                 { renderLists(props.userType) }
             </div>
-            <UserSettingsDialog open={open} handleClose={() => setOpen(false)} onUpdateUserSettingsRequest={(info) => console.log(info)}/>
-            <CreateTicketDialog categories={props.categories} open={createTicketOpen} handleClose={() => setCreateTicketOpen(false)} onUserCreateTicketRequest={ (info) => console.log(info)} />
+            <UserSettingsDialog open={open} handleClose={() => setOpen(false)} />
+
+            <CreateTicketDialog 
+                categories={props.categories} 
+                open={createTicketOpen} 
+                handleClose={() => setCreateTicketOpen(false)} 
+                onUserCreateTicketRequest={ (info) => props.addTicket(info)} 
+            />
+
             <EditTicketDialog 
-                ticket={ticketToEdit} 
-                userType='helper' 
+                ticket={ticketToEdit}  
                 open={editTicketOpen} 
-                categories={['React', 'Financial', 'Other']} 
+                categories={props.categories} 
                 handleClose={() => handleCloseEdit()} 
                 onUserEditTicketRequest={ (info) => console.log(info)} />
         </div>
@@ -174,7 +207,16 @@ const mapStateToProps = state => {
         userType: state.userType,
         tickets : state.tickets,
         categories: state.categories,
+        userTickets: state.userTickets,
+        userId: state.userId,
     }
 }
 
-export default connect(mapStateToProps, {})(Dashboard);
+export default connect(mapStateToProps, {
+    fetchCategories, 
+    fetchHelperTicketsId,
+    fetchStudentTicketsId,
+    addTicket,
+    editTicket,
+
+})(Dashboard);

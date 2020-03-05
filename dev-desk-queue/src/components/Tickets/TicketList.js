@@ -10,7 +10,9 @@ const TicketList = props => {
                 <div className='ticket-list'>
                  {
                         props.tickets.map( ticket => {
-                            return <GeneralTicket onTicketClick={(id) => props.onTicketClick(id)} ticket={ticket} />
+                            // console.log("ticketlist large", ticket.ticket)
+                            //data mapped to compenent is within ticket
+                            return <GeneralTicket key={ticket.ticket.id} onTicketClick={(id) => props.onTicketClick(id)} ticket={ticket} />
                         })
                  }
                 </div>
@@ -20,6 +22,7 @@ const TicketList = props => {
                 <div className='small-ticket-list'>
                     {
                         props.tickets.map( ticket => {
+                            // console.log("ticketlist", ticket)
                             return <SmallGeneralTicket onTicketClick={(id) => props.onTicketClick(id)}  ticket={ticket}/>
                         })
                     }

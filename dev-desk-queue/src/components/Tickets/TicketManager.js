@@ -9,7 +9,7 @@ import TicketList from './TicketList';
 
 import data from '../../data/dummyData';
 
-import {fetchTickets,fetchCategories} from "../../actions";
+import {fetchTickets,fetchCategories, fetchStudentTicketsId} from "../../actions";
 
 
 
@@ -34,17 +34,17 @@ const TicketManager = props => {
         } else if(userType === '0') {
             return [
                 {
-                    id: "dashboard",
+                    
                     name: 'Dashboard',
                     route: '/dashboard'
                 }, 
                 {
-                    id: "create a ticket",
+                   
                     name: 'Create a Ticket',
                     route: '/create-a-ticket'
                 },
                 {
-                    id: "settings",
+                    
                     name: 'Settings',
                     route: '/settings'
                 }
@@ -53,10 +53,22 @@ const TicketManager = props => {
     }
 
     const initialInfo = {
-        title: '', 
-        description: '',
-        tried: '',
-        category: ''
+        helper : {
+            id: '',
+            username: ""
+        },
+        student : {
+            id: "",
+            username: ""
+        },
+        ticket : {
+            category: "",
+            description : "",
+            id : "",
+            status : null,
+            title: "",
+            tried: "",
+            }
     }
 
     const [open, setOpen] = React.useState(false);
@@ -68,21 +80,24 @@ const TicketManager = props => {
 
     React.useEffect(()=>{
 
-        const getCategories = () =>{
-            props.fetchCategories()
-        }
-
-
-  
-            props.fetchTickets()
         
-        getCategories();
+        props.fetchCategories();
+
+
+        if(props.userType === "1"){
+            props.fetchTickets();
+        } else {
+            props.fetchStudentTicketsId(props.userId)
+        }
+        
+        
+        
        
     },[])
 
     React.useEffect( () => {
         console.log('ticket clicked', ticketToEdit);
-        if(ticketToEdit.title !== '') {
+        if(ticketToEdit.ticket.title !== '') {
             setEditTicketOpen(true);
         }
     }, [ticketToEdit])
@@ -121,7 +136,9 @@ const TicketManager = props => {
 
     const onTicketClick = id => {
         //this function will grab the ticket and populate the EditTicketDialog
-        setTicketToEdit( props.tickets.filter( ticket => { return ticket.id === id } )[0])
+
+        /////////////////////////////////////////////////added the ticket.ticket
+        setTicketToEdit( props.tickets.filter( ticket => { return ticket.ticket.id === id } )[0])
     }
 
     return (
@@ -134,10 +151,9 @@ const TicketManager = props => {
             </div>
 
             <UserSettingsDialog 
-                email='user@email.com' 
                 open={open} 
                 handleClose={() => setOpen(false)} 
-                onUpdateUserSettingsRequest={(info) => console.log(info)}/>
+            />
             
             <CreateTicketDialog 
                 categories={props.categories} 
@@ -162,11 +178,12 @@ const mapStateToProps = state => {
         tickets : state.tickets,
         userType: state.userType,
         categories: state.categories,
-
+        userId: state.userId,
     }
 }
 
 export default connect(mapStateToProps, {
     fetchTickets,
-    fetchCategories
+    fetchCategories,
+    fetchStudentTicketsId,
 })(TicketManager);

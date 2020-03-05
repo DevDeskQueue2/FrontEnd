@@ -12,15 +12,20 @@ const SideNavigation = props => {
             ], 
             onLinkClick: function(route)
     */
+   const handleLogOut = (e) =>{
+    //    localStorage.removeItem("token");
+   }
     
     return (
         <div className='side-navbar'>
             { console.log('rendering sidenav') }
             {
                 props.links.map( link => {
-                    return <div key={link.id} className='nav-link' onClick={() => props.onLinkClick(link.route)}>{link.name}</div>
+                    return <div key={link.name} className='nav-link' onClick={() => props.onLinkClick(link.route)}>{link.name}</div>
                 })
+                
             }
+            <div className="nav-link" onClick={handleLogOut()}>Sign Out</div>
         </div>
     )
 };

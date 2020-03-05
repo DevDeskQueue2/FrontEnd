@@ -6,18 +6,34 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
+
+import {connect} from "react-redux";
+
 const EditTicketDialog = props => {
 
     console.log('edit ticket dialog', props);
 
     const initialInfo = {
-        title: '', 
-        description: '',
-        tried: '',
-        category: ''
+        helper : {
+            id: "",
+            username: ""
+        },
+        student : {
+            id: "",
+            username: ""
+        },
+        ticket : {
+            category: "",
+            description : "",
+            id : "",
+            status : "",
+            title: "",
+            tried: "",
+            }
     }
 
-    const isStudent = props.userType === 'student';
+    const isStudent = props.userType === '0';
+    //student
 
     const [info, setInfo] = React.useState(props.ticket) 
 
@@ -32,7 +48,11 @@ const EditTicketDialog = props => {
     const handleChange = evt => {
         setInfo({
             ...info,
-            [evt.target.name]: evt.target.value
+            ticket: {
+                ...info.ticket,
+                [evt.target.name]: evt.target.value
+            }
+            
         })
     }
 
@@ -55,8 +75,8 @@ const EditTicketDialog = props => {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={info.category}
-                        onChange={evt => setInfo({...info, category: evt.target.value})}
+                        value={info.ticket.category}
+                        onChange={evt => handleChange(evt)}
                     >
                         {
                             props.categories.map(item => {
@@ -73,13 +93,14 @@ const EditTicketDialog = props => {
                     type='text'
                     name='category'
                     disabled={true}
-                    value={info.category} />
+                    value={info.ticket.category} />
             )
         }
     }
 
     const renderCompleteButton = () => {
-        if(props.userType === 'helper') {
+        //helper
+        if(props.userType === '1') {
             return (
                 <Button onClick={() => handleEditRequest(true)} color="primary">
                     Complete
@@ -92,13 +113,15 @@ const EditTicketDialog = props => {
         <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
             <DialogContent>
                 <h2>Ticket Information</h2>
-                <h4>Edit details below:</h4>
+                {/* <h4>Edit details below:</h4> */}
+                
+                {/* {info.helper.id  !== 0 ?  <div>{info.helper.username} is working on It</div>: <div>{info.ticket.status}</div>} */}
                 <TextField 
                     label='Title' 
                     type='text' 
                     name='title' 
                     disabled={!isStudent}
-                    value={info.title} 
+                    value={info.ticket.title} 
                     onChange={(evt) => handleChange(evt)} />
                 <br />
                 <TextField 
@@ -106,7 +129,7 @@ const EditTicketDialog = props => {
                     type='text' 
                     name='description'  
                     disabled={!isStudent}
-                    value={info.description}
+                    value={info.ticket.description}
                     onChange={(evt) => handleChange(evt)} />
                 <br />
                 <TextField 
@@ -114,12 +137,13 @@ const EditTicketDialog = props => {
                     type='text' 
                     name='tried'  
                     disabled={!isStudent}
-                    value={info.tried}
+                    value={info.ticket.tried}
                     onChange={(evt) => handleChange(evt)} />
 
                 <br />
 
-                { renderSelect(isStudent, 'Category')}
+                {/* { renderSelect(isStudent, 'Category')} */}
+                {/*NO dislplaying the select properly*/ }
                 
             </DialogContent>
             
@@ -139,4 +163,11 @@ const EditTicketDialog = props => {
     )
 }
 
-export default EditTicketDialog;
+const mapStateToProps = state => {
+    return{
+        userType: state.userType,
+
+    }
+}
+
+export default connect(mapStateToProps,{})(EditTicketDialog);

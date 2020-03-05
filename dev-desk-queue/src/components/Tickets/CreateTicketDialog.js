@@ -6,9 +6,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
+import {connect} from "react-redux";
+
 const CreateTicketDialog = props => {
 
     const initialInfo = {
+        id: props.userId,
         title: '', 
         description: '',
         tried: '',
@@ -18,6 +21,7 @@ const CreateTicketDialog = props => {
     const [info, setInfo] = React.useState(initialInfo)
 
     const handleChange = evt => {
+        console.log("create ticket",info)
         setInfo({
             ...info,
             [evt.target.name]: evt.target.value
@@ -91,4 +95,11 @@ const CreateTicketDialog = props => {
     )
 }
 
-export default CreateTicketDialog;
+
+const mapStateToProps = state => {
+    return {
+        userId: state.userId,
+
+    }
+}
+export default connect(mapStateToProps, {})(CreateTicketDialog);

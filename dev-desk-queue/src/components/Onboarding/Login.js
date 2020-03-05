@@ -6,6 +6,7 @@ import cogoToast from 'cogo-toast';
 
 import {connect} from "react-redux";
 
+
 const Login = props => {
 
     console.log(props)
@@ -51,6 +52,7 @@ const Login = props => {
 
         console.log('done with validation', emailError);
     }
+
 
     const validate = () => {
         //this functino validates user input
@@ -124,6 +126,7 @@ const Login = props => {
                 <br />
 
             </FormGroup>
+            
             <div className='onboarding-nav-buttons'>
                 <Button variant='outlined' disabled={props.isFetching} onClick={(evt) => handleSubmit(evt)}>Login</Button> 
                 <Button variant='outlined' onClick={ (evt) => props.onRequestToRegister() } >To Register</Button>
@@ -136,6 +139,8 @@ const Login = props => {
 const mapStateToProps = state => {
     return {
         isFetching : state.isFetching,
+        error: state.error,
+        
     }
 }
 

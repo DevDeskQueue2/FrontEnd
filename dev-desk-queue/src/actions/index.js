@@ -40,7 +40,8 @@ export const login = state => dispatch => {
 
     })
     .catch(err=>{
-        dispatch({type: LOGIN_ERROR, payload: err})
+        localStorage.removeItem("token")
+        dispatch({type: LOGIN_ERROR, payload: err.response.data})
     })
 
 }
@@ -74,7 +75,6 @@ export const UPDATE_USER_ERROR = "UPDATE_USER_ERROR";
 
 export const updateUser = ({username, id, password, userType}) => dispatch => {
     dispatch({type : UPDATE_USER_START})
-
 
     return axiosWithAuth().put(`/api/auth/${id}`,{username, password, userType})
         .then(res => {
@@ -111,10 +111,10 @@ export const ADD_TICKET_START = "ADD_TICKET_START";
 export const ADD_TICKET_SUCCESS ="ADD_TICKET_SUCCESS";
 export const ADD_TICKET_ERROR = "ADD_TICKET_ERROR";
 
-export const addTicket = state => dispatch => {
+export const addTicket = ({id ,username, title, description, tried, category}) => dispatch => {
     dispatch({type: ADD_TICKET_START})
 
-    return axiosWithAuth().post("auth url", state)
+    return axiosWithAuth().post(`api/tickets/students/${id}`, {title, description, tried, category})
     .then(res => {
         dispatch({type: ADD_TICKET_SUCCESS, payload: res.data})
 
@@ -167,11 +167,26 @@ export const FETCH_TICKETS_ID_START = "FETCH_TICKETS_ID_START";
 export const FETCH_TICKETS_ID_SUCCESS = "FETCH_TICKETS_ID_SUCCESS";
 export const FETCH_TICKETS_ID_ERROR = "FETCH_TICKETS_ID_ERROR";
 
-export const fetchTicketById = state => dispatch => {
+export const fetchHelperTicketsId = state => dispatch => {
     dispatch({type: FETCH_TICKETS_ID_START})
-    const { id } = state;
+    // const { id } = state;
     return axiosWithAuth()
-        .get(`/${id}`)
+        .get(`api/tickets/helpers/${state}`)
+        .then(res => {
+            dispatch({type : FETCH_TICKETS_ID_SUCCESS, payload: res.data})
+            
+        })
+        .catch(err => {
+            dispatch({type : FETCH_TICKETS_ID_ERROR, payload: err})
+        })
+}
+
+
+export const fetchStudentTicketsId = state => dispatch => {
+    dispatch({type: FETCH_TICKETS_ID_START})
+    // const { id } = state;
+    return axiosWithAuth()
+        .get(`api/tickets/students/${state}`)
         .then(res => {
             dispatch({type : FETCH_TICKETS_ID_SUCCESS, payload: res.data})
             
