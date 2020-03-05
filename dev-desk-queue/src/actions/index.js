@@ -197,3 +197,20 @@ export const fetchStudentTicketsId = state => dispatch => {
 }
 
 
+export const ASSIGN_TICKET_START = "ASSIGN_TICKET_START";
+export const ASSIGN_TICKET_SUCCESS = "ASSIGN_TICKET_SUCCESS";
+export const ASSIGN_TICKET_ERROR = "ASSIGN_TICKET_ERROR";
+
+
+export const assignTicket = state => dispatch => {
+    dispatch({type: ASSIGN_TICKET_START})
+
+    const {studentId, userId} = state;
+    return axiosWithAuth().put(`/api/tickets/${studentId}/helpers/${userId}`)
+    .then((res)=>{
+        dispatch({type: ASSIGN_TICKET_START, payload: res.message})
+    })
+    .catch(err=> {
+        dispatch({type: ADD_TICKET_ERROR, payload: err})
+    })
+}

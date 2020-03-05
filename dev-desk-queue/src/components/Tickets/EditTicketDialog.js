@@ -8,6 +8,7 @@ import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
 
 import {connect} from "react-redux";
+import {assignTicket} from "../../actions";
 
 const EditTicketDialog = props => {
 
@@ -56,18 +57,25 @@ const EditTicketDialog = props => {
         })
     }
 
-    const handleEditRequest = (isComplete) => {
+    const handleEditRequest = () => {
         // this function will send the ticket information back to whomever called it
-        if(!isComplete) {
-            props.onUserEditTicketRequest(info);
-        } else {
-            props.onUserEditTicketRequest({...info, status: 'Resolved'})
-        }
-        setInfo(initialInfo)
-        props.handleClose();
+        // if(!isComplete) {
+        //     props.onUserEditTicketRequest(info);
+        // } else {
+        //     props.onUserEditTicketRequest({...info, status: 'Resolved'})
+        // }
+        // setInfo(initialInfo)
+        // props.handleClose();
+
+        console.log(props.ticket)
+    }
+
+    const handleAssignRequest = () => {
+        props.assignTicket(props.ticket.helper.id, props.ticket.student.id);
     }
 
     const renderSelect = enabled => {
+        console.log(enabled);
         if(enabled) {
             return (
                 <FormControl>
@@ -98,12 +106,12 @@ const EditTicketDialog = props => {
         }
     }
 
-    const renderCompleteButton = () => {
+    const renderAssignButton = () => {
         //helper
-        if(props.userType === '1') {
+        if(props.userType === '1' && info.helper.id === 0) {
             return (
-                <Button onClick={() => handleEditRequest(true)} color="primary">
-                    Complete
+                <Button onClick={() => handleAssignRequest()} color="primary">
+                    Assign
                 </Button>
             )
         }
@@ -142,15 +150,15 @@ const EditTicketDialog = props => {
 
                 <br />
 
-                {/* { renderSelect(isStudent, 'Category')} */}
+                { renderSelect(isStudent, 'Category')}
                 {/*NO dislplaying the select properly*/ }
                 
             </DialogContent>
             
             <DialogActions>
 
-                { renderCompleteButton() }
-                <Button onClick={() => handleEditRequest()} color="primary">
+                { props.userType ? renderAssignButton() : null }
+                <Button disabled= {props.userId !== info.studentId} onClick={() => handleEditRequest()} color="primary">
                     Edit
                 </Button>
                 <Button onClick={() => props.handleClose()} color="primary">
@@ -166,8 +174,12 @@ const EditTicketDialog = props => {
 const mapStateToProps = state => {
     return{
         userType: state.userType,
+        userId : state.userId,
 
     }
 }
 
-export default connect(mapStateToProps,{})(EditTicketDialog);
+export default connect(mapStateToProps,{
+    assignTicket,
+
+})(EditTicketDialog);
