@@ -35,14 +35,16 @@ const CreateTicketDialog = props => {
     const handleCreateRequest = () => {
         // this function will send the ticket information back to whomever called it
         // props.onUserCreateTicketRequest(info);
-        props.addTicket(info)
+        props.addTicket(info).then(()=>{
+            props.fetchStudentTicketsId(props.userId);
+        })
         setInfo(initialInfo)
         props.handleClose();
     }
 
-    React.useEffect(()=>{
-        props.fetchStudentTicketsId(props.userId)
-    },[props.addTicket])
+//     React.useEffect(()=>{
+//         props.fetchStudentTicketsId(props.userId)
+//     },[props.addTicket])
 
     return (
         <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
