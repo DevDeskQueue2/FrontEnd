@@ -8,7 +8,7 @@ import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
 
 import {connect} from "react-redux";
-import {assignTicket,editTicket} from "../../actions";
+import {assignTicket,editTicket, fetchStudentTicketsId,deleteTicket} from "../../actions";
 
 const EditTicketDialog = props => {
 
@@ -37,13 +37,16 @@ const EditTicketDialog = props => {
     //student
 
     const [info, setInfo] = React.useState(props.ticket) 
+  
 
-    React.useEffect( () => {
-        setInfo(props.ticket);
-    }, [])
+    // React.useEffect( () => {
+    //     setInfo(props.ticket);
+    //     setHelperStatus(props.ticket.ticket.status)
+    // }, [])
 
     React.useEffect( () => {
         setInfo(props.ticket)
+
     }, [props.open])
 
     const handleChange = evt => {
@@ -58,27 +61,40 @@ const EditTicketDialog = props => {
         })
     }
 
+
     const handleEditRequest = () => {
-        // this function will send the ticket information back to whomever called it
-        // if(!isComplete) {
-        //     props.onUserEditTicketRequest(info);
-        // } else {
-        //     props.onUserEditTicketRequest({...info, status: 'Resolved'})
-        // }
-        // setInfo(initialInfo)
-        // props.handleClose();
 
         props.editTicket(info).then(()=>{
-            props.handleClose();
+            props.fetchStudentTicketsId(props.userId);
         })
         
+        props.handleClose();
 
         console.log(info)
     }
 
-    const handleAssignRequest = () => {
-        props.assignTicket(props.ticket.helper.id, props.ticket.student.id);
+    const handleAssignRequest = (ticket) => {
+
+        const {status} = ticket;
+
+        //url: /api/tickets/:id/helpers/:helperId
+        // if(status === null){
+        //     props.assignTicket(props.ticket.ticket.id, props.userId, "Pending");
+        // } else if (status === "Pending") {
+
+        // }
+
+        
     }
+
+    const handleDeleteRequest =() => {
+        props.deleteTicket(info.ticket.id).then(()=>{
+            props.fetchStudentTicketsId(props.userId)
+        })
+        setInfo(initialInfo);
+        props.handleClose();
+    }
+
 
     const renderSelect = enabled => {
         console.log(enabled);
@@ -113,16 +129,7 @@ const EditTicketDialog = props => {
         }
     }
 
-    const renderAssignButton = () => {
-        //helper
-        if(props.userType === '1' && info.helper.id === 0) {
-            return (
-                <Button onClick={() => handleAssignRequest()} color="primary">
-                    Assign
-                </Button>
-            )
-        }
-    }
+
 
     return (
         <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
@@ -157,18 +164,26 @@ const EditTicketDialog = props => {
 
                 <br />
 
+                
+
                 { renderSelect(isStudent, 'Category')}
-                {/*NO dislplaying the select properly*/ }
+                
+
                 
             </DialogContent>
             
             <DialogActions>
 
-                { props.userType ? renderAssignButton() : null }
-                {props.userId === info.studentId ? <Button onClick={()=>handleEditRequest()}>Edit</Button>: null}
-                {/* <Button disabled= {props.userId !== info.studentId} onClick={() => handleEditRequest()} color="primary">
-                    Edit
-                </Button> */}
+                { props.userType === "0" && <Button color="secondary" onClick={()=> handleDeleteRequest()}>Delete</Button>}
+                {console.log("ticket info", props.userId)}
+
+                { props.userType === "1" &&
+                    <Button onClick={() => handleAssignRequest(props.ticket.ticket)} color="primary">
+                    Assign</Button> 
+                }
+
+                {props.userType === "0" ? <Button color="primary" onClick={()=>handleEditRequest()}>Submit Edit</Button>: null}
+
                 <Button onClick={() => props.handleClose()} color="primary">
                     Cancel
                 </Button>
@@ -190,5 +205,8 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps,{
     assignTicket,
     editTicket,
+    fetchStudentTicketsId,
+    deleteTicket,
+
 
 })(EditTicketDialog);

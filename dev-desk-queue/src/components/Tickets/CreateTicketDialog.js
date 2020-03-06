@@ -42,9 +42,7 @@ const CreateTicketDialog = props => {
         props.handleClose();
     }
 
-//     React.useEffect(()=>{
-//         props.fetchStudentTicketsId(props.userId)
-//     },[props.addTicket])
+
 
     return (
         <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>

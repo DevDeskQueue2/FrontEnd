@@ -42,7 +42,10 @@ const Login = props => {
 
         if(validate()) {
             props.onUserLoginRequest(info);
-            setInfo(initialInfo);
+            setInfo({
+                ...info,
+                password: ""
+            });
         } else {
             cogoToast.error('Incorrect credentials', {
                 hideAfter: 3,

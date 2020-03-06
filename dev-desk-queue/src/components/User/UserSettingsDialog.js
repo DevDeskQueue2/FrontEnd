@@ -9,24 +9,36 @@ import { useHistory } from "react-router"
 import {connect} from "react-redux";
 import {removeUser, updateUser} from "../../actions";
 
+import cogoToast from 'cogo-toast';
+
 
 const UserSettingsDialog = props => {
-    console.log(props)
+    console.log('userSettings props',props)
 
     let history = useHistory();
 
 
-    const initialInfo = {
-        username: props.username,
-        password: '',
-        confirmPassword: '',
-        userType: props.userType,
-    }
+    // const initialInfo = {
+    //     username: props.username,
+    //     password: '',
+    //     confirmPassword: '',
+    //     userType: props.userType,
+    //     id: props.userId,
+    // }
 
+    React.useEffect(() =>{
+        setInfo({
+                username: props.username,
+                password: '',
+                confirmPassword: '',
+                userType: props.userType,
+                id: props.userId,
+            })
+    },[props.open])
 
-    const [info, setInfo] = React.useState(initialInfo)
+    const [info, setInfo] = React.useState({});
 
-    console.log("info", info)
+    console.log("User Settings info", info)
     const handleChange = evt => {
         setInfo({
             ...info,
@@ -38,9 +50,24 @@ const UserSettingsDialog = props => {
         // this function will validate the user input, if password is '', do not update
         // props.onUpdateUserSettingsRequest(info);
 
-        props.updateUser({...info, id: props.userId}).then(()=>props.handleClose())
-        
-        // props.handleClose();
+        if(info.password !== info.confirmPassword) {
+            //popup cogo toast and do nothing
+            cogoToast.error('The passwords do not match', {
+                hideAfter: 3,
+                position: 'top-center'
+            })
+        } else if (info.password === "" || info.confirmPassword === "") {
+            cogoToast.error("Please provide password to make changes", {
+                hideAfter: 3,
+                position: "top-center"
+            })
+        } else {
+            props.updateUser({...info,}).then(({username, userType,id})=> {
+                // setInfo({username : username, password: '', confirmPassword: '', userType: userType, userId: id});
+                props.handleClose()
+                cogoToast.info('User has been updated.');
+            })
+        }
     }
 
     const removeUser = () => {
@@ -82,14 +109,15 @@ const UserSettingsDialog = props => {
             
             <DialogActions>
 
-                <Button onClick={removeUser} color="secondary" >
+                <Button onClick={() => removeUser()} color="secondary" >
                     Delete Account
                 </Button>
                 <Button onClick={() => handleUpdateRequest()} color="primary">
                     Update
                 </Button>
                 <Button onClick={() => {
-                        setInfo(initialInfo);
+                        // setInfo(initialInfo);
+                        // setInfo({username : props.username, password: '', confirmPassword: '', userType: props.userType});
                         props.handleClose();
                     }} 
                     color="primary"
@@ -105,6 +133,7 @@ const UserSettingsDialog = props => {
 }
 
 const mapStateToProps = state => {
+    // console.log('setting state to props usersetttings');
     return {
         username : state.username,
         userId: state.userId,

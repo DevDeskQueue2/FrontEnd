@@ -1,6 +1,7 @@
 import React from 'react';
 import Login from './Login';
 import Register from './Register';
+import cogoToast from 'cogo-toast';
 
 import {connect} from "react-redux";
 
@@ -15,8 +16,23 @@ const Onboarding = props => {
             return <Login 
                         onUserLoginRequest={ ({email, password}) => { 
                             console.log("onUserLoginRequest"); 
-                            props.login({"username": email, password}).then(() => props.history.push("/dashboard"));
-                            // props.login(info).then(() => props.history.push('/dashboard'));
+                            props.login({"username": email, password}).then((res) => {
+                                    if(res.status === 401){
+                                        cogoToast.error('Incorrect credentials', {
+                                            hideAfter: 3,
+                                            position: 'top-center'
+                                        });
+                                    } else if (res.status === 500 || res.status === 404) {
+                                        cogoToast.error("Internal Error", {
+                                            hideAfter : 3,
+                                            position: "top-center"
+                                        })
+                                    } else {
+                                        props.history.push("/dashboard")
+                                    }
+                                    
+                                });
+                            
                         } } 
                         onRequestToRegister={ () => setIsLogin(false) }
                     />

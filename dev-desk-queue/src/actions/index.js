@@ -37,11 +37,12 @@ export const login = state => dispatch => {
         const user = JSON.stringify(res.data)
         localStorage.setItem("userInfo", user)
         dispatch({type: LOGIN_SUCCESS, payload: res.data})
-
+        return res.data
     })
     .catch(err=>{
         localStorage.removeItem("token")
         dispatch({type: LOGIN_ERROR, payload: err.response.data})
+        return err.response
     })
 
 }
@@ -79,6 +80,7 @@ export const updateUser = ({username, id, password, userType}) => dispatch => {
     return axiosWithAuth().put(`/api/auth/${id}`,{username, password, userType})
         .then(res => {
             dispatch({type: UPDATE_USER_SUCCESS, payload: res.data})
+            
         })
         .catch(err=>{
             dispatch({type: UPDATE_USER_ERROR, payload: err})
@@ -124,26 +126,6 @@ export const addTicket = ({id ,username, title, description, tried, category}) =
     })
 }
 
-
-export const FETCH_TICKETS_START = "FETCH_TICKETS_START";
-export const FETCH_TICKETS_SUCCESS = "FETCH_TICKETS_SUCCESS";
-export const FETCH_TICKETS_ERROR = "FETCH_TICKETS_ERROR";
-
-
-export const fetchTickets = () => dispatch => {
-    dispatch({type: FETCH_TICKETS_START})
-    return axiosWithAuth().get("api/tickets")
-    .then(res => {
-        
-        dispatch({type: FETCH_TICKETS_SUCCESS, payload: res.data})
-
-    })
-    .catch(err => {
-        dispatch({type:FETCH_TICKETS_ERROR, payload: err})
-    })
-}
-
-
 export const EDIT_TICKET_START = "EDIT_TICKET_START";
 export const EDIT_TICKET_SUCCESS = "EDIT_TICKET_SUCCESS";
 export const EDIT_TICKET_ERROR = "EDIT_TICKET_ERROR";
@@ -164,6 +146,45 @@ export const editTicket = state => dispatch => {
     })
     
 }
+
+export const DELETE_TICKET_START = "DELETE_TICKET_START";
+export const DELETE_TICKET_SUCCESS = "DELETE_TICKET_SUCCESS";
+export const DELETE_TICKET_ERROR = "DELETE_TICKET_ERROR"
+
+export const deleteTicket = state => dispatch => {
+    dispatch({type:DELETE_TICKET_START})
+
+    return axiosWithAuth().delete(`api/tickets/${state}/students/`)
+        .then(res => {
+            dispatch({type:DELETE_TICKET_SUCCESS, payload: res.data})
+        })
+        .catch(err=> {
+            dispatch({type:DELETE_TICKET_SUCCESS, payload: err})
+        })
+
+}
+
+
+export const FETCH_TICKETS_START = "FETCH_TICKETS_START";
+export const FETCH_TICKETS_SUCCESS = "FETCH_TICKETS_SUCCESS";
+export const FETCH_TICKETS_ERROR = "FETCH_TICKETS_ERROR";
+
+
+export const fetchTickets = () => dispatch => {
+    dispatch({type: FETCH_TICKETS_START})
+    return axiosWithAuth().get("api/tickets")
+    .then(res => {
+        
+        dispatch({type: FETCH_TICKETS_SUCCESS, payload: res.data})
+
+    })
+    .catch(err => {
+        dispatch({type:FETCH_TICKETS_ERROR, payload: err})
+    })
+}
+
+
+
 
 
 export const FETCH_TICKETS_ID_START = "FETCH_TICKETS_ID_START";
@@ -205,15 +226,15 @@ export const ASSIGN_TICKET_SUCCESS = "ASSIGN_TICKET_SUCCESS";
 export const ASSIGN_TICKET_ERROR = "ASSIGN_TICKET_ERROR";
 
 
-export const assignTicket = state => dispatch => {
+export const assignTicket = (Id, helperId) => dispatch => {
     dispatch({type: ASSIGN_TICKET_START})
-
-    const {studentId, userId} = state;
-    return axiosWithAuth().put(`/api/tickets/${studentId}/helpers/${userId}`)
-    .then((res)=>{
-        dispatch({type: ASSIGN_TICKET_START, payload: res.message})
-    })
-    .catch(err=> {
-        dispatch({type: ADD_TICKET_ERROR, payload: err})
-    })
+    
+    console.log(Id, helperId)
+    // return axiosWithAuth().put(`/api/tickets/${Id}/helpers/${helperId}`)
+    // .then((res)=>{
+    //     dispatch({type: ASSIGN_TICKET_START, payload: res.message})
+    // })
+    // .catch(err=> {
+    //     dispatch({type: ADD_TICKET_ERROR, payload: err})
+    // })
 }
