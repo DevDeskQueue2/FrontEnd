@@ -26,6 +26,9 @@ import {
     FETCH_TICKETS_ID_START,
     FETCH_TICKETS_ID_SUCCESS,
     FETCH_TICKETS_ID_ERROR,
+    ASSIGN_TICKET_START,
+    ASSIGN_TICKET_SUCCESS,
+    ASSIGN_TICKET_ERROR,
 } from "../actions/index";
 
 
@@ -33,7 +36,7 @@ const User = JSON.parse(localStorage.getItem("userInfo"))
 
 const initialState = {
     userInfo: User,
-    username: User? User.username : "",
+    username: User? User.username : localStorage.removeItem("token"),
     userType : User? User.userType : "",
     userId: User? User.id : "",
     // currentType: "",
@@ -112,6 +115,7 @@ const devDeskReducer = (state = initialState, action) => {
 
             }
         case UPDATE_USER_SUCCESS:
+            console.log('update_user_success', action)
             return {
                 ...state,
                 isFetching: false,
@@ -166,20 +170,7 @@ const devDeskReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: true,
             }
-        case FETCH_TICKETS_SUCCESS:
-            return {
-                ...state,
-                isFetching : false,
-                tickets: action.payload
-            }
-        case FETCH_TICKETS_ERROR:
-            return{
-                ...state,
-                isFetching: false,
-                error: action.payload
-            }
-
-        case EDIT_TICKET_START: 
+            case EDIT_TICKET_START: 
             return{
                 ...state,
                 isFetching: true,
@@ -195,6 +186,20 @@ const devDeskReducer = (state = initialState, action) => {
                 isFetching: false,
                 error: action.payload
             }
+        case FETCH_TICKETS_SUCCESS:
+            return {
+                ...state,
+                isFetching : false,
+                tickets: action.payload
+            }
+        case FETCH_TICKETS_ERROR:
+            return{
+                ...state,
+                isFetching: false,
+                error: action.payload
+            }
+
+        
         case FETCH_TICKETS_ID_START : 
             return {
                 ...state,

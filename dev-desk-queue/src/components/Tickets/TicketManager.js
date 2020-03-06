@@ -146,6 +146,21 @@ const TicketManager = props => {
         
     }
 
+    // const testTicket = {
+    //     helper: {id: 16, username: ""},
+
+    //     student:  {id: 3, username: "Hudson"},
+
+    //     ticket : {
+    //         category : "TEST category",
+    //         description : "TEST description",
+    //         id: 115,
+    //         status: "Pending",
+    //         title : "test title",
+    //         tried : "test tried"
+    //     }
+    // }
+
     return (
         <div className='ticket-manager-container'>
             <SideNavigation onLinkClick={ (to) => onLinkClick(to)} links={ getLinkList(props.userType)}/>
