@@ -131,7 +131,7 @@ const Login = props => {
             </FormGroup>
             
             <div className='onboarding-nav-buttons'>
-                <Button variant='outlined' disabled={props.isFetching} onClick={(evt) => handleSubmit(evt)}>Login</Button> 
+                <Button variant='outlined' disabled={props.isFetching} onClick={(evt) => handleSubmit(evt)}>{props.isFetching ? "Logging in ..." : "Login"}</Button> 
                 <Button variant='outlined' onClick={ (evt) => props.onRequestToRegister() } >To Register</Button>
             </div>
             

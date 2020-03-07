@@ -13,11 +13,11 @@ export const signUp = state => dispatch => {
         .then(res => {
             
             dispatch({type : SIGNUP_SUCCESS})
-            
+           return res
         })
         .catch(err => {
             dispatch ({type: SIGNUP_ERROR, payload: err})
-
+            return err
         })
     
 };
@@ -226,15 +226,26 @@ export const ASSIGN_TICKET_SUCCESS = "ASSIGN_TICKET_SUCCESS";
 export const ASSIGN_TICKET_ERROR = "ASSIGN_TICKET_ERROR";
 
 
-export const assignTicket = (Id, helperId) => dispatch => {
-    dispatch({type: ASSIGN_TICKET_START})
+export const assignTicket = (status,Id, helperId) => dispatch => {
+    // dispatch({type: ASSIGN_TICKET_START})
     
-    console.log(Id, helperId)
-    // return axiosWithAuth().put(`/api/tickets/${Id}/helpers/${helperId}`)
-    // .then((res)=>{
-    //     dispatch({type: ASSIGN_TICKET_START, payload: res.message})
+    console.log("action", status, Id, helperId)
+    return axiosWithAuth().put(`/api/tickets/${Id}/helpers/${helperId}`, {"status": status})
+    .then((res)=>{
+        dispatch({type: ASSIGN_TICKET_START, payload: res.message})
+    })
+    .catch(err=> {
+        dispatch({type: ADD_TICKET_ERROR, payload: err})
+    })
+    // const testPropme =  new Promise((res,rej) =>{
+    //     setTimeout(function(){
+    //         res(status,Id,helperId)
+    //     },1000)
     // })
-    // .catch(err=> {
-    //     dispatch({type: ADD_TICKET_ERROR, payload: err})
-    // })
+
+    // return testPropme.then(
+    //     function(s,h,i) {
+    //         return s,h,i
+    //     })
+    
 }

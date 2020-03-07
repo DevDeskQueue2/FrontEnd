@@ -8,7 +8,7 @@ import { Select, InputLabel, MenuItem, FormControl  } from '@material-ui/core';
 
 
 import {connect} from "react-redux";
-import {assignTicket,editTicket, fetchStudentTicketsId,deleteTicket} from "../../actions";
+import {assignTicket,editTicket, fetchStudentTicketsId,deleteTicket,fetchTickets} from "../../actions";
 
 const EditTicketDialog = props => {
 
@@ -38,6 +38,7 @@ const EditTicketDialog = props => {
 
     const [info, setInfo] = React.useState(props.ticket) 
   
+    const [helperSelect, setHelperSelect] = React.useState("");
 
     // React.useEffect( () => {
     //     setInfo(props.ticket);
@@ -46,7 +47,8 @@ const EditTicketDialog = props => {
 
     React.useEffect( () => {
         setInfo(props.ticket)
-
+        setHelperSelect(props.ticket.ticket.status === null ? "Un-assigned" : props.ticket.ticket.status)
+        console.log("Ticket status:",props.ticket.ticket.status)
     }, [props.open])
 
     const handleChange = evt => {
@@ -61,6 +63,10 @@ const EditTicketDialog = props => {
         })
     }
 
+    const handleHelperSelect = evt => {
+        setHelperSelect(evt.target.value)
+    }
+
 
     const handleEditRequest = () => {
 
@@ -73,16 +79,12 @@ const EditTicketDialog = props => {
         console.log(info)
     }
 
-    const handleAssignRequest = (ticket) => {
+    const handleAssignRequest = (status , ticket) => {
 
-        const {status} = ticket;
-
-        //url: /api/tickets/:id/helpers/:helperId
-        // if(status === null){
-        //     props.assignTicket(props.ticket.ticket.id, props.userId, "Pending");
-        // } else if (status === "Pending") {
-
-        // }
+        props.assignTicket(status, ticket.ticket.id, props.userId)
+        props.handleClose();
+        props.fetchTickets();
+        console.log(status);
 
         
     }
@@ -95,9 +97,42 @@ const EditTicketDialog = props => {
         props.handleClose();
     }
 
+    const renderHelperButton = (ticket) => {
+        console.log(ticket)
+       if(ticket.helper.id === 0) {
+           return <Button color="primary" onClick={()=>handleAssignRequest("Pending", info)}>Assign</Button>
+       } else if (ticket.helper.id === props.userId){
+            return <Button color="primary" onClick={()=>handleAssignRequest(helperSelect, info)}>Update Status</Button>
+       } else if (ticket.helper.id !== props.userId){
+           
+           return<Button disabled>Assigned to {ticket.helper.username}</Button>
+       }
+    }
+
+    const renderHelperSelect = (ticket) => {
+        //set to 0 to test should be props.userId
+        if(ticket.helper.id ===  props.userId ){
+            return (
+                <FormControl>
+                    <InputLabel id ="helper-status">Status</InputLabel>
+                    <Select
+                        label="helper-status"
+                        id="helper"
+                        name="helper_status"
+                        value={helperSelect}
+                        onChange={evt=> handleHelperSelect(evt)}
+                    >
+                    <MenuItem value="Un-assigned">Un-assign</MenuItem>
+                    <MenuItem value="Resolved">Resolve</MenuItem>
+                    </Select>
+                </FormControl>
+            )
+        }
+    }
+
 
     const renderSelect = enabled => {
-        console.log(enabled);
+        
         if(enabled) {
             return (
                 <FormControl>
@@ -132,7 +167,7 @@ const EditTicketDialog = props => {
 
 
     return (
-        <Dialog open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
+        <Dialog className="edit-ticket-dialog" open={props.open} onClose={() => props.handleClose} aria-labelledby="form-dialog-title" fullWidth='false' maxWidth='xs'>
             <DialogContent>
                 <h2>Ticket Information</h2>
                 {/* <h4>Edit details below:</h4> */}
@@ -149,7 +184,10 @@ const EditTicketDialog = props => {
                 <TextField 
                     label='Description' 
                     type='text' 
-                    name='description'  
+                    name='description'
+                    variant="outlined"
+                    multiline
+                    rows="4"   
                     disabled={!isStudent}
                     value={info.ticket.description}
                     onChange={(evt) => handleChange(evt)} />
@@ -157,29 +195,32 @@ const EditTicketDialog = props => {
                 <TextField 
                     label="What I've tried"
                     type='text' 
-                    name='tried'  
+                    name='tried'
+                    variant="outlined"
+                    multiline
+                    rows="3"  
                     disabled={!isStudent}
                     value={info.ticket.tried}
                     onChange={(evt) => handleChange(evt)} />
 
                 <br />
 
-                
-
                 { renderSelect(isStudent, 'Category')}
                 
-
+                <br/>
+                
+                {renderHelperSelect(props.ticket)}
                 
             </DialogContent>
             
             <DialogActions>
 
                 { props.userType === "0" && <Button color="secondary" onClick={()=> handleDeleteRequest()}>Delete</Button>}
-                {console.log("ticket info", props.userId)}
 
                 { props.userType === "1" &&
-                    <Button onClick={() => handleAssignRequest(props.ticket.ticket)} color="primary">
-                    Assign</Button> 
+                    renderHelperButton(props.ticket)
+                    // <Button onClick={() => handleAssignRequest(props.ticket.ticket)} color="primary">
+                    // Assign</Button> 
                 }
 
                 {props.userType === "0" ? <Button color="primary" onClick={()=>handleEditRequest()}>Submit Edit</Button>: null}
@@ -207,6 +248,7 @@ export default connect(mapStateToProps,{
     editTicket,
     fetchStudentTicketsId,
     deleteTicket,
+    fetchTickets,
 
 
 })(EditTicketDialog);

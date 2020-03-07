@@ -35,7 +35,7 @@ const GeneralTicket = props => {
         
             {/* { renderHelperInformation() }
             { renderStudentInformation() } */}
-            {props.userType === "1"?  <div>Student Name : {props.ticket.student.username}</div>: null}
+            {/* {props.userType === "1"?  <div>Student Name : {props.ticket.student.username}</div>: null} */}
 
         </div>
     )

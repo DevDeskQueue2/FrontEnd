@@ -174,7 +174,7 @@ const Dashboard = props => {
                 <div className='ticket-lists'>
                     <div className='assigned-tickets'>
                         <h3>Assigned Tickets</h3>
-                        {props.userTickets.length > 0 ? <TicketList size='small' tickets={[]} onTicketClick={(id) => onTicketClick(id)}/> : <div><p>No Assigened Tickets</p><p>Go to Ticket Manager to add tickets</p></div>}
+                        {props.userTickets.length > 0 ? <TicketList size='small' tickets={props.userTickets} onTicketClick={(id) => onTicketClick(id)}/> : <div><p>No Assigened Tickets</p><p>Go to Ticket Manager to add tickets</p></div>}
                     </div>
                 </div>
             )
